@@ -1,0 +1,22 @@
+.courses{
+    text-align: left;
+    margin-left: 15px;
+}
+
+.courses h1{
+    font-size: 30px;
+}
+.courses p {
+    font-size: 20px;
+}
+.courseEdit:hover {
+    background-color: rgb(0, 48, 0) !important;
+}
+
+.courseDelete:hover {
+    background-color: rgb(102, 0, 0) !important;
+}
+
+.courseView:hover {
+    background-color: rgb(0, 0, 121) !important;
+}

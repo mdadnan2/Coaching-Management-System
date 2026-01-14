@@ -1,0 +1,28 @@
+{
+  "name": "coaching-management-app",
+  "version": "1.0.0",
+  "description": "Full-stack coaching management application",
+  "private": true,
+  "scripts": {
+    "install:all": "npm install && cd Coaching_Management-Backend && npm install && cd \"../coaching-management frontend\" && npm install",
+    "dev": "concurrently \"npm run dev:backend\" \"npm run dev:frontend\"",
+    "dev:backend": "cd Coaching_Management-Backend && npm run dev",
+    "dev:frontend": "cd \"coaching-management frontend\" && npm start",
+    "start:backend": "cd Coaching_Management-Backend && npm start",
+    "start:frontend": "cd \"coaching-management frontend\" && npm start",
+    "build:frontend": "cd \"coaching-management frontend\" && npm run build",
+    "test:backend": "cd Coaching_Management-Backend && npm test",
+    "test:frontend": "cd \"coaching-management frontend\" && npm test",
+    "clean": "rimraf Coaching_Management-Backend/node_modules \"coaching-management frontend/node_modules\" node_modules",
+    "lint:backend": "cd Coaching_Management-Backend && npm run lint",
+    "lint:frontend": "cd \"coaching-management frontend\" && npm run lint"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2",
+    "rimraf": "^5.0.5"
+  },
+  "engines": {
+    "node": ">=16.0.0",
+    "npm": ">=8.0.0"
+  }
+}

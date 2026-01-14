@@ -1,0 +1,103 @@
+/* 
+body {
+    overflow: hidden;
+}
+
+.main-card {
+    display: flex;
+    padding: 56px 0px;
+    justify-content: center;
+    align-items: center;
+    height: 90vh;
+    background-color: #f1f1f1;
+    overflow-y: auto;
+}
+
+.card {
+    padding: 20px;
+    border-radius: 8px;
+    width: 50%;
+    overflow: hidden;
+    text-align: center;
+}
+
+.title {
+    margin-bottom: 20px;
+    color: #333;
+}
+
+.data {
+    display: flex;
+    flex-direction: column;
+}
+
+.input-group {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 16px
+}
+
+.input-group .input-field {
+    width: 48%;
+    text-align: left;
+}
+
+.input-field {
+    width: 370px;
+}
+
+.select-field {
+    text-align: left;
+}
+
+.submit-btn {
+    margin: 16px !important
+}
+
+.submit-btn:hover {
+    background-color: #2980b9;
+}
+
+@media only screen and (max-width: 800px) {
+
+    .input-group .input-field {
+        width: 100%
+    }
+
+    .card {
+        border-radius: 0px;
+        width: 100%;
+    }
+} */
+.card {
+    padding: 10px;
+    border-radius: 8px;
+    width: 100%;
+    overflow: hidden;
+    text-align: center;
+}
+
+.input-group {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 16px
+}
+
+.input-group .input-field {
+    width: 48%;
+    text-align: left;
+}
+
+.submit-btn {
+    margin: 16px !important;
+}
+
+.submit-btn:hover {
+    background-color: #2980b9;
+}

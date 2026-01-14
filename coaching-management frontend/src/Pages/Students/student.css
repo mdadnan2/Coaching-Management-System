@@ -1,0 +1,19 @@
+::-webkit-scrollbar {
+    display: none;
+}
+
+.scrollbar-hidden {
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+}
+
+.scrollbar-hidden::-webkit-scrollbar {
+    display: none;
+}
+
+.edit-btn:hover{
+    background-color: rgb(0, 48, 0) !important;
+}
+.delete-btn:hover{
+    background-color: rgb(102, 0, 0) !important;
+}
