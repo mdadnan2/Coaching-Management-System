@@ -6,8 +6,8 @@ Full-stack coaching management system built with React and Node.js/Express.
 
 ```
 coaching-management-app/
-├── Coaching_Management-Backend/    # Node.js/Express API
-├── coaching-management frontend/   # React frontend
+├── backend/    # Node.js/Express API
+├── frontend/   # React frontend
 ├── package.json                    # Root workspace scripts
 └── README.md                       # This file
 ```
@@ -36,14 +36,14 @@ npm run install:all
 
 Backend:
 ```bash
-cd Coaching_Management-Backend
+cd backend
 cp .env.example .env.development
 # Edit .env.development with your MongoDB connection string
 ```
 
 Frontend:
 ```bash
-cd coaching-management\ frontend
+cd frontend
 cp .env.example .env.development
 # Edit if needed (default: http://localhost:5010)
 ```
@@ -73,11 +73,11 @@ npm run dev:frontend
 - `npm run build:frontend` - Build frontend for production
 - `npm run clean` - Remove all node_modules
 
-### Backend (cd Coaching_Management-Backend)
+### Backend (cd backend)
 - `npm run dev` - Development mode with auto-reload
 - `npm start` - Production mode
 
-### Frontend (cd coaching-management\ frontend)
+### Frontend (cd frontend)
 - `npm start` - Development server
 - `npm run build` - Production build
 - `npm test` - Run tests
