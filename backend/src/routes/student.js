@@ -12,11 +12,11 @@ router.get('/qualification', controllers.studentsQualification);
 router.get('/stats', authMiddleware.verifyToken, controllers.studentsRecStatus);
 router.get('/profile', authMiddleware.verifyToken, controllers.getCurrentProfile);
 router.get('/', authMiddleware.verifyToken, controllers.getStudent);
-router.delete('/:id', authMiddleware.verifyToken, controllers.deleteStudent);
 router.post('/update', authMiddleware.verifyToken, controllers.updateStudent);
 router.post('/settings', authMiddleware.verifyToken, controllers.updateNotificationSettings);
 router.post('/change-password', authMiddleware.verifyToken, controllers.changePassword);
 router.get('/:id', authMiddleware.verifyToken, controllers.getSinglestudent);
+router.delete('/:id', authMiddleware.verifyToken, controllers.deleteStudent);
 
 
 
