@@ -278,10 +278,11 @@ const AddCourse = () => {
                     {/* view button */}
                     <Button
                       className="courseView"
-                      sx={{ backgroundColor: "blue", color: "white" }}
+                      variant="contained"
+                      startIcon={<FullscreenIcon />}
                       onClick={() => viewCourse(item._id)}
                     >
-                      <FullscreenIcon />
+                      View Chapters
                     </Button>
                   </Box>
                 </Card>

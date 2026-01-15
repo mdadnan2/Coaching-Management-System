@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Box, Drawer, List, ListItem, ListItemButton, ListItemIcon, ListItemText, AppBar, Toolbar, Typography, IconButton, Avatar, Menu, MenuItem, Divider, Switch } from "@mui/material";
-import { Dashboard, AccountCircle, LibraryBooks, Logout, Menu as MenuIcon, DarkMode, LightMode, Settings } from "@mui/icons-material";
+import { Dashboard, AccountCircle, LibraryBooks, Logout, Menu as MenuIcon, DarkMode, LightMode, Settings, Person } from "@mui/icons-material";
 import { NavLink, useLocation } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { logout } from "../reducers/LoginSlice";
@@ -105,6 +105,9 @@ export default function ModernSidebar({ children }) {
             <Avatar sx={{ width: 36, height: 36, bgcolor: 'primary.main' }}>A</Avatar>
           </IconButton>
           <Menu anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={handleMenuClose}>
+            <MenuItem component={NavLink} to="/profile" onClick={handleMenuClose}>
+              <Person sx={{ mr: 1, fontSize: 20 }} /> View Profile
+            </MenuItem>
             <MenuItem onClick={handleLogout}>
               <Logout sx={{ mr: 1, fontSize: 20 }} /> Logout
             </MenuItem>

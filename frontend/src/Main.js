@@ -7,6 +7,7 @@ import Dashboard from "./Pages/Dashboard/Dashboard";
 import AddCourse from "./Pages/Syllabus/Add Course/Add_course";
 import ChapterForm from "./Pages/Syllabus/Add Chapter in Course/ChapterForm";
 import AddChapter from "./Pages/Syllabus/Add Chapter in Course/AddChapter";
+import Profile from "./Pages/Profile/Profile";
 
 const Main = () => {
   return (
@@ -18,6 +19,7 @@ const Main = () => {
         <Route path="/addCourse" element={<AddCourse />} />
         <Route path={"/selectCourse/:id"} element={<AddChapter />} />
         <Route path={"/syllabusForm"} element={<ChapterForm />} />
+        <Route path="/profile" element={<Profile />} />
       </Routes>
     </ModernSidebar>
   );

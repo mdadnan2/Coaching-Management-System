@@ -174,7 +174,7 @@ const ModernAddCourse = () => {
                     startIcon={<Visibility />}
                     onClick={() => navigate(`/selectCourse/${course._id}`)}
                   >
-                    View
+                    View Chapters
                   </Button>
                   <Box sx={{ display: "flex", gap: 0.5 }}>
                     <IconButton size="small" color="primary" onClick={() => handleEdit(course)}>

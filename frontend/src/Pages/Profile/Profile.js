@@ -165,8 +165,7 @@ const Profile = () => {
                 <TextField
                   label="Email"
                   value={profile.email}
-                  onChange={(e) => setProfile({ ...profile, email: e.target.value })}
-                  disabled={!editing}
+                  disabled
                   fullWidth
                 />
               </Grid>
