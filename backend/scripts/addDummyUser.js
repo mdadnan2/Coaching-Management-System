@@ -3,7 +3,7 @@ const Student = require('../src/models/student');
 const { encryptString } = require('../src/helpers/security');
 
 // Database connection
-const DB_CONNECTION_STRING = 'mongodb+srv://adnan9:Pune123@cluster0.lfm5r5d.mongodb.net/Coaching_management';
+const DB_CONNECTION_STRING = 'mongodb+srv://coachingapp:CoachApp2025%21Secure@cluster0.qs50xpc.mongodb.net/coaching-db?appName=Cluster0';
 
 const addDummyUser = async () => {
     try {

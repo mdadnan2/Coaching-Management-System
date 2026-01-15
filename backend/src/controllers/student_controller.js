@@ -75,6 +75,24 @@ exports.registerStudent = async (req, res, next) => {
     params = filterObject(params)
 
     try {
+        // Check for duplicate email
+        const existingEmail = await studentSchema.findOne({ email: req.body.email });
+        if (existingEmail) {
+            return res.status(STATUS.badRequest).send(resObject(STATUS.badRequest, 'Email already exists'));
+        }
+
+        // Check for duplicate phone number
+        const existingPhone = await studentSchema.findOne({ phoneNumber: req.body.phoneNumber });
+        if (existingPhone) {
+            return res.status(STATUS.badRequest).send(resObject(STATUS.badRequest, 'Phone number already exists'));
+        }
+
+        // Check for duplicate student ID
+        const existingStudentId = await studentSchema.findOne({ studentId: req.body.studentId });
+        if (existingStudentId) {
+            return res.status(STATUS.badRequest).send(resObject(STATUS.badRequest, 'Student ID already exists'));
+        }
+
         const newStudent = new studentSchema({
             ...params,
             password: encryptString(req.body.password),
@@ -96,9 +114,21 @@ exports.registerStudent = async (req, res, next) => {
         res.status(STATUS.created).send(resObject(STATUS.created, general.studentCreated, savedStudent));
 
     } catch (error) {
-        console.error(error);
+        console.error('Registration error:', error);
 
-        res.status(STATUS.internalServerError).send(resObject(STATUS.internalServerError, general.internalServerError, error))
+        // Handle Mongoose validation errors
+        if (error.name === 'ValidationError') {
+            const messages = Object.values(error.errors).map(err => err.message);
+            return res.status(STATUS.badRequest).send(resObject(STATUS.badRequest, messages.join(', ')));
+        }
+
+        // Handle duplicate key errors
+        if (error.code === 11000) {
+            const field = Object.keys(error.keyPattern)[0];
+            return res.status(STATUS.badRequest).send(resObject(STATUS.badRequest, `${field} already exists`));
+        }
+
+        res.status(STATUS.internalServerError).send(resObject(STATUS.internalServerError, 'Failed to register student', error.message))
     }
 };
 
