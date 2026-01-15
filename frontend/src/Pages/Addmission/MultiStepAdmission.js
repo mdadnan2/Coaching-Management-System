@@ -66,13 +66,13 @@ const MultiStepAdmission = ({ onSubmit, sendStudentData }) => {
     switch (activeStep) {
       case 0:
         return (
-          <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
-            <TextField label="Full Name" name="studentname" value={formData.studentname} onChange={handleChange} required fullWidth />
-            <TextField label="Student ID" name="studentId" value={formData.studentId} onChange={handleChange} fullWidth />
-            <TextField label="Email" name="email" type="email" value={formData.email} onChange={handleChange} required fullWidth />
-            <TextField label="Phone Number" name="phoneNumber" value={formData.phoneNumber} onChange={handleChange} required fullWidth />
-            <TextField label="Date of Birth" name="dateOfBirth" type="date" value={formData.dateOfBirth} onChange={handleChange} InputLabelProps={{ shrink: true }} fullWidth />
-            <FormControl fullWidth>
+          <Box sx={{ display: 'flex', flexDirection: 'column', gap: { xs: 1.5, sm: 2 } }}>
+            <TextField label="Full Name" name="studentname" value={formData.studentname} onChange={handleChange} required fullWidth size="small" />
+            <TextField label="Student ID" name="studentId" value={formData.studentId} onChange={handleChange} fullWidth size="small" />
+            <TextField label="Email" name="email" type="email" value={formData.email} onChange={handleChange} required fullWidth size="small" />
+            <TextField label="Phone Number" name="phoneNumber" value={formData.phoneNumber} onChange={handleChange} required fullWidth size="small" />
+            <TextField label="Date of Birth" name="dateOfBirth" type="date" value={formData.dateOfBirth} onChange={handleChange} InputLabelProps={{ shrink: true }} fullWidth size="small" />
+            <FormControl fullWidth size="small">
               <InputLabel>Gender</InputLabel>
               <Select name="gender" value={formData.gender} onChange={handleChange} label="Gender">
                 <MenuItem value="male">Male</MenuItem>
@@ -86,11 +86,12 @@ const MultiStepAdmission = ({ onSubmit, sendStudentData }) => {
               value={formData.password}
               onChange={handleChange}
               fullWidth
+              size="small"
               InputProps={{
                 endAdornment: (
                   <InputAdornment position="end">
-                    <IconButton onClick={() => setShowPassword(!showPassword)} edge="end">
-                      {showPassword ? <VisibilityOff /> : <Visibility />}
+                    <IconButton onClick={() => setShowPassword(!showPassword)} edge="end" size="small">
+                      {showPassword ? <VisibilityOff fontSize="small" /> : <Visibility fontSize="small" />}
                     </IconButton>
                   </InputAdornment>
                 ),
@@ -100,8 +101,8 @@ const MultiStepAdmission = ({ onSubmit, sendStudentData }) => {
         );
       case 1:
         return (
-          <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
-            <FormControl fullWidth>
+          <Box sx={{ display: 'flex', flexDirection: 'column', gap: { xs: 1.5, sm: 2 } }}>
+            <FormControl fullWidth size="small">
               <InputLabel>Highest Qualification</InputLabel>
               <Select name="highestQualification" value={formData.highestQualification} onChange={handleChange} label="Highest Qualification">
                 <MenuItem value="ssc">SSC (10th)</MenuItem>
@@ -111,15 +112,15 @@ const MultiStepAdmission = ({ onSubmit, sendStudentData }) => {
                 <MenuItem value="phd">PhD</MenuItem>
               </Select>
             </FormControl>
-            <TextField label="Aadhaar Card" name="aadharCard" value={formData.aadharCard} onChange={handleChange} fullWidth />
-            <TextField label="PAN Card (Optional)" name="panCard" value={formData.panCard} onChange={handleChange} fullWidth />
-            <TextField label="Address" name="address" value={formData.address} onChange={handleChange} multiline rows={3} fullWidth />
+            <TextField label="Aadhaar Card" name="aadharCard" value={formData.aadharCard} onChange={handleChange} fullWidth size="small" />
+            <TextField label="PAN Card (Optional)" name="panCard" value={formData.panCard} onChange={handleChange} fullWidth size="small" />
+            <TextField label="Address" name="address" value={formData.address} onChange={handleChange} multiline rows={3} fullWidth size="small" />
           </Box>
         );
       case 2:
         return (
-          <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
-            <FormControl fullWidth>
+          <Box sx={{ display: 'flex', flexDirection: 'column', gap: { xs: 1.5, sm: 2 } }}>
+            <FormControl fullWidth size="small">
               <InputLabel>Select Course</InputLabel>
               <Select name="selectCourse" value={formData.selectCourse} onChange={handleChange} label="Select Course">
                 {courses.map((course) => (
@@ -127,7 +128,7 @@ const MultiStepAdmission = ({ onSubmit, sendStudentData }) => {
                 ))}
               </Select>
             </FormControl>
-            <TextField label="Date of Joining" name="dateOfJoining" type="date" value={formData.dateOfJoining} onChange={handleChange} InputLabelProps={{ shrink: true }} fullWidth />
+            <TextField label="Date of Joining" name="dateOfJoining" type="date" value={formData.dateOfJoining} onChange={handleChange} InputLabelProps={{ shrink: true }} fullWidth size="small" />
           </Box>
         );
       default:
@@ -136,15 +137,17 @@ const MultiStepAdmission = ({ onSubmit, sendStudentData }) => {
   };
 
   return (
-    <Card sx={{ p: 4, maxWidth: 700, mx: 'auto' }}>
-      <Typography variant="h5" fontWeight={600} sx={{ mb: 3, textAlign: 'center' }}>
+    <Card sx={{ p: { xs: 2, sm: 4 }, maxWidth: 700, mx: 'auto' }}>
+      <Typography variant="h5" fontWeight={600} sx={{ mb: 3, textAlign: 'center', fontSize: { xs: '1.25rem', sm: '1.5rem' } }}>
         {sendStudentData ? 'Update Student' : 'Add New Student'}
       </Typography>
       
-      <Stepper activeStep={activeStep} sx={{ mb: 4 }}>
-        {steps.map((label) => (
+      <Stepper activeStep={activeStep} sx={{ mb: 3 }}>
+        {steps.map((label, index) => (
           <Step key={label}>
-            <StepLabel>{label}</StepLabel>
+            <StepLabel sx={{ '& .MuiStepLabel-label': { display: { xs: 'none', sm: 'block' } } }}>
+              {label}
+            </StepLabel>
           </Step>
         ))}
       </Stepper>
@@ -163,11 +166,11 @@ const MultiStepAdmission = ({ onSubmit, sendStudentData }) => {
         </motion.div>
       </AnimatePresence>
 
-      <Box sx={{ display: 'flex', justifyContent: 'space-between', mt: 4 }}>
-        <Button disabled={activeStep === 0} onClick={handleBack}>
+      <Box sx={{ display: 'flex', justifyContent: 'space-between', mt: 3, gap: 2 }}>
+        <Button disabled={activeStep === 0} onClick={handleBack} size="small">
           Back
         </Button>
-        <Button variant="contained" onClick={handleNext}>
+        <Button variant="contained" onClick={handleNext} size="small">
           {activeStep === steps.length - 1 ? (sendStudentData ? 'Update' : 'Submit') : 'Next'}
         </Button>
       </Box>

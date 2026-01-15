@@ -95,8 +95,8 @@ const ChapterForm = () => {
   return (
     <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.3 }}>
       <Box sx={{ maxWidth: 800, mx: "auto" }}>
-        <Box sx={{ mb: 4 }}>
-          <Typography variant="h4" fontWeight={700} sx={{ mb: 1 }}>
+        <Box sx={{ mb: { xs: 3, sm: 4 } }}>
+          <Typography variant="h4" fontWeight={700} sx={{ mb: 1, fontSize: { xs: '1.5rem', sm: '2.125rem' } }}>
             {editChapter ? 'Edit Chapter' : 'Add Chapter'}
           </Typography>
           <Typography variant="body2" color="text.secondary">
@@ -104,9 +104,9 @@ const ChapterForm = () => {
           </Typography>
         </Box>
 
-        <Card sx={{ p: 4, border: "1px solid", borderColor: "divider", boxShadow: "0 1px 3px rgba(0,0,0,0.05)" }}>
+        <Card sx={{ p: { xs: 2, sm: 4 }, border: "1px solid", borderColor: "divider", boxShadow: "0 1px 3px rgba(0,0,0,0.05)" }}>
           <form onSubmit={handleSubmit}>
-            <Box sx={{ display: "flex", flexDirection: "column", gap: 3 }}>
+            <Box sx={{ display: "flex", flexDirection: "column", gap: { xs: 2, sm: 3 } }}>
               <TextField
                 label="Chapter Title"
                 name="title"
@@ -114,6 +114,7 @@ const ChapterForm = () => {
                 onChange={handleChange}
                 required
                 fullWidth
+                size="small"
                 placeholder="e.g., Introduction to React"
               />
 
@@ -126,14 +127,15 @@ const ChapterForm = () => {
                 fullWidth
                 multiline
                 rows={3}
+                size="small"
                 placeholder="Brief description of the chapter"
               />
 
               <Box>
-                <Typography variant="subtitle1" fontWeight={600} sx={{ mb: 2 }}>
+                <Typography variant="subtitle1" fontWeight={600} sx={{ mb: 1.5, fontSize: { xs: '0.9rem', sm: '1rem' } }}>
                   Concepts
                 </Typography>
-                <Box sx={{ display: "flex", gap: 1, mb: 2 }}>
+                <Box sx={{ display: "flex", gap: 1, mb: 1.5, flexDirection: { xs: 'column', sm: 'row' } }}>
                   <TextField
                     placeholder="Add a concept"
                     value={conceptInput}
@@ -142,11 +144,18 @@ const ChapterForm = () => {
                     fullWidth
                     size="small"
                   />
-                  <Button variant="contained" onClick={addConcept} startIcon={<Add />}>
+                  <Button 
+                    variant="contained" 
+                    onClick={addConcept} 
+                    startIcon={<Add />}
+                    size="small"
+                    fullWidth={false}
+                    sx={{ minWidth: { xs: '100%', sm: 'auto' }, whiteSpace: 'nowrap' }}
+                  >
                     Add
                   </Button>
                 </Box>
-                <Box sx={{ display: "flex", flexWrap: "wrap", gap: 1 }}>
+                <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.5 }}>
                   {chapterForm.concepts.map((concept, i) => (
                     <Chip
                       key={i}
@@ -154,16 +163,18 @@ const ChapterForm = () => {
                       onDelete={() => removeConcept(i)}
                       color="primary"
                       variant="outlined"
+                      size="small"
+                      sx={{ fontSize: '0.75rem' }}
                     />
                   ))}
                 </Box>
               </Box>
 
               <Box>
-                <Typography variant="subtitle1" fontWeight={600} sx={{ mb: 2 }}>
+                <Typography variant="subtitle1" fontWeight={600} sx={{ mb: 1.5, fontSize: { xs: '0.9rem', sm: '1rem' } }}>
                   References
                 </Typography>
-                <Box sx={{ display: "flex", gap: 1, mb: 2 }}>
+                <Box sx={{ display: "flex", gap: 1, mb: 1.5, flexDirection: { xs: 'column', sm: 'row' } }}>
                   <TextField
                     placeholder="Add a reference URL"
                     value={referenceInput}
@@ -172,11 +183,18 @@ const ChapterForm = () => {
                     fullWidth
                     size="small"
                   />
-                  <Button variant="contained" onClick={addReference} startIcon={<Add />}>
+                  <Button 
+                    variant="contained" 
+                    onClick={addReference} 
+                    startIcon={<Add />}
+                    size="small"
+                    fullWidth={false}
+                    sx={{ minWidth: { xs: '100%', sm: 'auto' }, whiteSpace: 'nowrap' }}
+                  >
                     Add
                   </Button>
                 </Box>
-                <Box sx={{ display: "flex", flexWrap: "wrap", gap: 1 }}>
+                <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.5 }}>
                   {chapterForm.references.map((ref, i) => (
                     <Chip
                       key={i}
@@ -188,14 +206,16 @@ const ChapterForm = () => {
                       href={ref}
                       target="_blank"
                       clickable
+                      size="small"
+                      sx={{ fontSize: '0.75rem', maxWidth: '100%' }}
                     />
                   ))}
                 </Box>
               </Box>
 
-              <Box sx={{ display: "flex", gap: 2, justifyContent: "flex-end", mt: 2 }}>
-                <Button onClick={() => navigate(-1)}>Cancel</Button>
-                <Button type="submit" variant="contained" size="large">
+              <Box sx={{ display: "flex", gap: 2, justifyContent: "flex-end", mt: { xs: 1, sm: 2 }, flexDirection: { xs: 'column', sm: 'row' } }}>
+                <Button onClick={() => navigate(-1)} size="small" fullWidth={false} sx={{ order: { xs: 2, sm: 1 } }}>Cancel</Button>
+                <Button type="submit" variant="contained" size="small" fullWidth={false} sx={{ order: { xs: 1, sm: 2 } }}>
                   {editChapter ? 'Update Chapter' : 'Create Chapter'}
                 </Button>
               </Box>

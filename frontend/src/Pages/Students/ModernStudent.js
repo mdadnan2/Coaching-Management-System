@@ -137,13 +137,14 @@ const Students = () => {
           </Typography>
         </Box>
 
-        <Paper sx={{ p: 3, mb: 3, border: '1px solid', borderColor: 'divider', boxShadow: '0 1px 3px rgba(0,0,0,0.05)' }}>
+        <Paper sx={{ p: { xs: 2, sm: 3 }, mb: 3, border: '1px solid', borderColor: 'divider', boxShadow: '0 1px 3px rgba(0,0,0,0.05)' }}>
           <Box sx={{ display: 'flex', gap: 2, flexWrap: 'wrap', alignItems: 'center' }}>
             <TextField
               placeholder="Search students..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               sx={{ flex: { xs: '1 1 100%', sm: 1 }, minWidth: 250 }}
+              size="small"
               InputProps={{
                 startAdornment: (
                   <InputAdornment position="start">
@@ -152,10 +153,13 @@ const Students = () => {
                 )
               }}
             />
-            <Button variant="outlined" startIcon={<FilterList />} sx={{ display: { xs: 'none', sm: 'inline-flex' } }}>
-              Filter
-            </Button>
-            <Button variant="outlined" startIcon={<Download />} onClick={handleExport}>
+            <Button 
+              variant="outlined" 
+              startIcon={<Download />} 
+              onClick={handleExport}
+              size="small"
+              sx={{ display: { xs: 'none', sm: 'inline-flex' } }}
+            >
               Export
             </Button>
             <Button
@@ -165,6 +169,7 @@ const Students = () => {
                 setEditedStudentData(undefined);
                 setOpen(true);
               }}
+              size="small"
               sx={{ flex: { xs: '1 1 100%', sm: 'initial' } }}
             >
               Add Student

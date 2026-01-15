@@ -92,8 +92,8 @@ const Profile = () => {
   return (
     <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.3 }}>
       <Box sx={{ maxWidth: 1200, mx: "auto" }}>
-        <Box sx={{ mb: 4 }}>
-          <Typography variant="h4" fontWeight={700} sx={{ mb: 1 }}>
+        <Box sx={{ mb: { xs: 3, sm: 4 } }}>
+          <Typography variant="h4" fontWeight={700} sx={{ mb: 1, fontSize: { xs: '1.75rem', sm: '2.125rem' } }}>
             Profile & Settings
           </Typography>
           <Typography variant="body2" color="text.secondary">
@@ -101,17 +101,17 @@ const Profile = () => {
           </Typography>
         </Box>
 
-        <Stack spacing={3}>
-          <Card sx={{ p: 3, border: "1px solid", borderColor: "divider", boxShadow: "0 1px 3px rgba(0,0,0,0.05)" }}>
-            <Box sx={{ display: "flex", alignItems: "center", gap: 3 }}>
+        <Stack spacing={{ xs: 2, sm: 3 }}>
+          <Card sx={{ p: { xs: 2, sm: 3 }, border: "1px solid", borderColor: "divider", boxShadow: "0 1px 3px rgba(0,0,0,0.05)" }}>
+            <Box sx={{ display: "flex", alignItems: "center", gap: { xs: 2, sm: 3 }, flexDirection: { xs: 'column', sm: 'row' }, textAlign: { xs: 'center', sm: 'left' } }}>
               <Avatar 
                 src={profile.photo}
-                sx={{ width: 80, height: 80, bgcolor: "primary.main", fontSize: 36 }}
+                sx={{ width: { xs: 70, sm: 80 }, height: { xs: 70, sm: 80 }, bgcolor: "primary.main", fontSize: { xs: 32, sm: 36 } }}
               >
                 {!profile.photo && profile.name.charAt(0)}
               </Avatar>
               <Box sx={{ flex: 1 }}>
-                <Typography variant="h5" fontWeight={600}>
+                <Typography variant="h5" fontWeight={600} sx={{ fontSize: { xs: '1.25rem', sm: '1.5rem' } }}>
                   {profile.name}
                 </Typography>
                 <Typography variant="body2" color="text.secondary">
@@ -122,6 +122,9 @@ const Profile = () => {
                 variant="outlined" 
                 startIcon={<Edit />}
                 component="label"
+                size="small"
+                fullWidth={true}
+                sx={{ maxWidth: { xs: '100%', sm: 'auto' } }}
               >
                 Change Photo
                 <input
@@ -134,11 +137,11 @@ const Profile = () => {
             </Box>
           </Card>
 
-          <Card sx={{ p: 4, border: "1px solid", borderColor: "divider", boxShadow: "0 1px 3px rgba(0,0,0,0.05)" }}>
-            <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", mb: 3 }}>
+          <Card sx={{ p: { xs: 2, sm: 4 }, border: "1px solid", borderColor: "divider", boxShadow: "0 1px 3px rgba(0,0,0,0.05)" }}>
+            <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", mb: { xs: 2, sm: 3 }, flexWrap: 'wrap', gap: 1 }}>
               <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
                 <Person />
-                <Typography variant="h6" fontWeight={600}>
+                <Typography variant="h6" fontWeight={600} sx={{ fontSize: { xs: '1rem', sm: '1.25rem' } }}>
                   Personal Information
                 </Typography>
               </Box>
@@ -146,12 +149,13 @@ const Profile = () => {
                 variant={editing ? "contained" : "outlined"}
                 startIcon={editing ? <Save /> : <Edit />}
                 onClick={editing ? handleSave : () => setEditing(true)}
+                size="small"
               >
                 {editing ? "Save" : "Edit"}
               </Button>
             </Box>
 
-            <Grid container spacing={3}>
+            <Grid container spacing={{ xs: 2, sm: 3 }}>
               <Grid item xs={12} sm={6}>
                 <TextField
                   label="Full Name"
@@ -159,6 +163,7 @@ const Profile = () => {
                   onChange={(e) => setProfile({ ...profile, name: e.target.value })}
                   disabled={!editing}
                   fullWidth
+                  size="small"
                 />
               </Grid>
               <Grid item xs={12} sm={6}>
@@ -167,6 +172,7 @@ const Profile = () => {
                   value={profile.email}
                   disabled
                   fullWidth
+                  size="small"
                 />
               </Grid>
               <Grid item xs={12} sm={6}>
@@ -176,6 +182,7 @@ const Profile = () => {
                   onChange={(e) => setProfile({ ...profile, phone: e.target.value })}
                   disabled={!editing}
                   fullWidth
+                  size="small"
                 />
               </Grid>
               <Grid item xs={12} sm={6}>
@@ -184,20 +191,21 @@ const Profile = () => {
                   value={profile.role}
                   disabled
                   fullWidth
+                  size="small"
                 />
               </Grid>
             </Grid>
           </Card>
 
-          <Card sx={{ p: 4, border: "1px solid", borderColor: "divider", boxShadow: "0 1px 3px rgba(0,0,0,0.05)" }}>
-            <Box sx={{ display: "flex", alignItems: "center", gap: 1, mb: 3 }}>
+          <Card sx={{ p: { xs: 2, sm: 4 }, border: "1px solid", borderColor: "divider", boxShadow: "0 1px 3px rgba(0,0,0,0.05)" }}>
+            <Box sx={{ display: "flex", alignItems: "center", gap: 1, mb: { xs: 2, sm: 3 } }}>
               <Lock />
-              <Typography variant="h6" fontWeight={600}>
+              <Typography variant="h6" fontWeight={600} sx={{ fontSize: { xs: '1rem', sm: '1.25rem' } }}>
                 Change Password
               </Typography>
             </Box>
 
-            <Grid container spacing={3}>
+            <Grid container spacing={{ xs: 2, sm: 3 }}>
               <Grid item xs={12}>
                 <TextField
                   label="Current Password"
@@ -205,10 +213,11 @@ const Profile = () => {
                   value={password.current}
                   onChange={(e) => setPassword({ ...password, current: e.target.value })}
                   fullWidth
+                  size="small"
                   InputProps={{
                     endAdornment: (
                       <Button onClick={() => setShowPassword({ ...showPassword, current: !showPassword.current })} sx={{ minWidth: 'auto', p: 1 }}>
-                        {showPassword.current ? <VisibilityOff /> : <Visibility />}
+                        {showPassword.current ? <VisibilityOff fontSize="small" /> : <Visibility fontSize="small" />}
                       </Button>
                     )
                   }}
@@ -221,10 +230,11 @@ const Profile = () => {
                   value={password.new}
                   onChange={(e) => setPassword({ ...password, new: e.target.value })}
                   fullWidth
+                  size="small"
                   InputProps={{
                     endAdornment: (
                       <Button onClick={() => setShowPassword({ ...showPassword, new: !showPassword.new })} sx={{ minWidth: 'auto', p: 1 }}>
-                        {showPassword.new ? <VisibilityOff /> : <Visibility />}
+                        {showPassword.new ? <VisibilityOff fontSize="small" /> : <Visibility fontSize="small" />}
                       </Button>
                     )
                   }}
@@ -237,27 +247,28 @@ const Profile = () => {
                   value={password.confirm}
                   onChange={(e) => setPassword({ ...password, confirm: e.target.value })}
                   fullWidth
+                  size="small"
                   InputProps={{
                     endAdornment: (
                       <Button onClick={() => setShowPassword({ ...showPassword, confirm: !showPassword.confirm })} sx={{ minWidth: 'auto', p: 1 }}>
-                        {showPassword.confirm ? <VisibilityOff /> : <Visibility />}
+                        {showPassword.confirm ? <VisibilityOff fontSize="small" /> : <Visibility fontSize="small" />}
                       </Button>
                     )
                   }}
                 />
               </Grid>
               <Grid item xs={12}>
-                <Button variant="contained" onClick={handlePasswordChange}>
+                <Button variant="contained" onClick={handlePasswordChange} size="small" fullWidth={true} sx={{ maxWidth: { xs: '100%', sm: 'auto' } }}>
                   Update Password
                 </Button>
               </Grid>
             </Grid>
           </Card>
 
-          <Card sx={{ p: 4, border: "1px solid", borderColor: "divider", boxShadow: "0 1px 3px rgba(0,0,0,0.05)" }}>
-            <Box sx={{ display: "flex", alignItems: "center", gap: 1, mb: 3 }}>
+          <Card sx={{ p: { xs: 2, sm: 4 }, border: "1px solid", borderColor: "divider", boxShadow: "0 1px 3px rgba(0,0,0,0.05)" }}>
+            <Box sx={{ display: "flex", alignItems: "center", gap: 1, mb: { xs: 2, sm: 3 } }}>
               <Palette />
-              <Typography variant="h6" fontWeight={600}>
+              <Typography variant="h6" fontWeight={600} sx={{ fontSize: { xs: '1rem', sm: '1.25rem' } }}>
                 Preferences
               </Typography>
             </Box>
@@ -265,7 +276,7 @@ const Profile = () => {
             <Stack spacing={2}>
               <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", py: 1 }}>
                 <Box>
-                  <Typography variant="body1" fontWeight={500}>Dark Mode</Typography>
+                  <Typography variant="body1" fontWeight={500} sx={{ fontSize: { xs: '0.875rem', sm: '1rem' } }}>Dark Mode</Typography>
                   <Typography variant="caption" color="text.secondary">Toggle dark/light theme</Typography>
                 </Box>
                 <Switch checked={darkMode} onChange={toggleDarkMode} />
@@ -273,7 +284,7 @@ const Profile = () => {
               <Divider />
               <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", py: 1 }}>
                 <Box>
-                  <Typography variant="body1" fontWeight={500}>Email Notifications</Typography>
+                  <Typography variant="body1" fontWeight={500} sx={{ fontSize: { xs: '0.875rem', sm: '1rem' } }}>Email Notifications</Typography>
                   <Typography variant="caption" color="text.secondary">Receive email updates</Typography>
                 </Box>
                 <Switch checked={notifications.email} onChange={() => handleNotificationChange('email')} />

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Box, Card, Typography, Grid, Avatar, LinearProgress, Chip, IconButton, Paper } from "@mui/material";
-import { TrendingUp, TrendingDown, People, School, CheckCircle, Cancel, MoreVert, CalendarMonth } from "@mui/icons-material";
+import { TrendingUp, TrendingDown, People, School, CheckCircle, Cancel, MoreVert, CalendarMonth, LibraryBooks } from "@mui/icons-material";
 import { PieChart } from "@mui/x-charts/PieChart";
 import { BarChart } from "@mui/x-charts/BarChart";
 import { LineChart } from "@mui/x-charts/LineChart";
@@ -15,7 +15,7 @@ const StatCard = ({ title, value, change, icon: Icon, color, trend }) => (
     transition={{ duration: 0.4 }}
   >
     <Card sx={{ 
-      p: 3, 
+      p: 2, 
       height: '100%',
       border: '1px solid',
       borderColor: 'divider',
@@ -25,9 +25,9 @@ const StatCard = ({ title, value, change, icon: Icon, color, trend }) => (
         borderColor: color,
       }
     }}>
-      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', mb: 2 }}>
-        <Avatar sx={{ bgcolor: `${color}15`, color: color, width: 48, height: 48 }}>
-          <Icon />
+      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', mb: 1 }}>
+        <Avatar sx={{ bgcolor: `${color}15`, color: color, width: 40, height: 40 }}>
+          <Icon fontSize="small" />
         </Avatar>
         <Chip 
           icon={trend === 'up' ? <TrendingUp fontSize="small" /> : <TrendingDown fontSize="small" />}
@@ -36,14 +36,15 @@ const StatCard = ({ title, value, change, icon: Icon, color, trend }) => (
           sx={{ 
             bgcolor: trend === 'up' ? '#10b98115' : '#ef444415',
             color: trend === 'up' ? '#10b981' : '#ef4444',
-            fontWeight: 600
+            fontWeight: 600,
+            height: 24
           }}
         />
       </Box>
-      <Typography variant="h4" fontWeight={700} sx={{ mb: 0.5 }}>
+      <Typography variant="h5" fontWeight={700} sx={{ mb: 0.5 }}>
         {value}
       </Typography>
-      <Typography variant="body2" color="text.secondary">
+      <Typography variant="body2" color="text.secondary" fontSize="0.875rem">
         {title}
       </Typography>
     </Card>
@@ -105,8 +106,10 @@ const Dashboard = () => {
       
       setStats(statsRes.data.data);
       setStudents(studentsRes.data.data);
-      setCourses(coursesRes.data.data);
+      setCourses(coursesRes.data.data || []);
+      console.log('Courses loaded:', coursesRes.data.data);
     } catch (error) {
+      console.error('Dashboard fetch error:', error);
       toast.error('Failed to load dashboard data');
     } finally {
       setLoading(false);
@@ -146,8 +149,8 @@ const Dashboard = () => {
         </Typography>
       </Box>
 
-      <Grid container spacing={3} sx={{ mb: 3 }}>
-        <Grid item xs={12} sm={6} lg={3}>
+      <Grid container spacing={2} sx={{ mb: 3 }}>
+        <Grid item xs={6} sm={6} md={3}>
           <StatCard
             title="Total Students"
             value={stats.total ?? 0}
@@ -157,7 +160,7 @@ const Dashboard = () => {
             trend="up"
           />
         </Grid>
-        <Grid item xs={12} sm={6} lg={3}>
+        <Grid item xs={6} sm={6} md={3}>
           <StatCard
             title="Active Students"
             value={stats.active ?? 0}
@@ -167,7 +170,7 @@ const Dashboard = () => {
             trend="up"
           />
         </Grid>
-        <Grid item xs={12} sm={6} lg={3}>
+        <Grid item xs={6} sm={6} md={3}>
           <StatCard
             title="Inactive Students"
             value={stats.inactive ?? 0}
@@ -177,7 +180,7 @@ const Dashboard = () => {
             trend="down"
           />
         </Grid>
-        <Grid item xs={12} sm={6} lg={3}>
+        <Grid item xs={6} sm={6} md={3}>
           <StatCard
             title="Completed Courses"
             value={stats.completed ?? 0}
@@ -191,32 +194,57 @@ const Dashboard = () => {
 
       <Grid container spacing={3}>
         <Grid item xs={12} lg={6}>
-          <Card sx={{ p: 3, border: '1px solid', borderColor: 'divider', boxShadow: '0 1px 3px rgba(0,0,0,0.05)', height: '100%' }}>
-            <Typography variant="h6" fontWeight={600} sx={{ mb: 3 }}>
+          <Card sx={{ p: 2, border: '1px solid', borderColor: 'divider', boxShadow: '0 1px 3px rgba(0,0,0,0.05)', height: '100%' }}>
+            <Typography variant="h6" fontWeight={600} sx={{ mb: 2 }}>
               Student Distribution
             </Typography>
-            <PieChart
-              series={[{
-                data: chartData,
-                highlightScope: { faded: 'global', highlighted: 'item' },
-                faded: { innerRadius: 30, additionalRadius: -30 },
-                innerRadius: 60,
-                paddingAngle: 2,
-              }]}
-              height={250}
-            />
+            <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', width: '100%', overflow: 'hidden' }}>
+              <PieChart
+                series={[{
+                  data: chartData,
+                  highlightScope: { faded: 'global', highlighted: 'item' },
+                  faded: { innerRadius: 20, additionalRadius: -20 },
+                  innerRadius: 30,
+                  paddingAngle: 2,
+                }]}
+                width={300}
+                height={180}
+                slotProps={{
+                  legend: {
+                    direction: 'row',
+                    position: { vertical: 'bottom', horizontal: 'middle' },
+                    padding: 0,
+                    itemMarkWidth: 12,
+                    itemMarkHeight: 12,
+                    markGap: 4,
+                    itemGap: 8,
+                  },
+                }}
+                margin={{ top: 0, bottom: 40, left: 0, right: 0 }}
+              />
+            </Box>
           </Card>
         </Grid>
 
-        <Grid item xs={12} lg={6}>
+        <Grid item xs={12}>
           <Card sx={{ p: 3, border: '1px solid', borderColor: 'divider', boxShadow: '0 1px 3px rgba(0,0,0,0.05)' }}>
             <Typography variant="h6" fontWeight={600} sx={{ mb: 3 }}>
-              Course Progress
+              Live Courses
             </Typography>
-            {courseProgress.length > 0 ? (
-              courseProgress.map((course, i) => (
-                <QuickStat key={i} label={course.label} value={course.value} color={['#6366f1', '#10b981', '#ec4899', '#f59e0b'][i % 4]} />
-              ))
+            {courses.length > 0 ? (
+              <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+                {courses.map((course) => (
+                  <Box key={course._id} sx={{ display: 'flex', alignItems: 'center', gap: 2, p: 2, bgcolor: 'background.default', borderRadius: 2 }}>
+                    <Avatar sx={{ bgcolor: 'primary.main' }}>
+                      <LibraryBooks />
+                    </Avatar>
+                    <Box sx={{ flex: 1 }}>
+                      <Typography variant="body2" fontWeight={600}>{course.title}</Typography>
+                      <Typography variant="caption" color="text.secondary">{course.description}</Typography>
+                    </Box>
+                  </Box>
+                ))}
+              </Box>
             ) : (
               <Typography variant="body2" color="text.secondary">No courses available</Typography>
             )}
