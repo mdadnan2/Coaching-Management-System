@@ -85,7 +85,7 @@ const Dashboard = () => {
   const [stats, setStats] = useState({
     total: 0,
     active: 0,
-    inactive: 0,
+    inActive: 0,
     completed: 0
   });
   const [students, setStudents] = useState([]);
@@ -104,10 +104,12 @@ const Dashboard = () => {
         instance.get('/course/')
       ]);
       
+      console.log('Stats API Response:', statsRes.data);
+      console.log('Stats Data:', statsRes.data.data);
+      
       setStats(statsRes.data.data);
       setStudents(studentsRes.data.data);
       setCourses(coursesRes.data.data || []);
-      console.log('Courses loaded:', coursesRes.data.data);
     } catch (error) {
       console.error('Dashboard fetch error:', error);
       toast.error('Failed to load dashboard data');
@@ -118,7 +120,7 @@ const Dashboard = () => {
 
   const chartData = [
     { id: 0, value: stats.active ?? 0, label: "Active", color: "#6366f1" },
-    { id: 1, value: stats.inactive ?? 0, label: "Inactive", color: "#f59e0b" },
+    { id: 1, value: stats.inActive ?? 0, label: "Inactive", color: "#f59e0b" },
     { id: 2, value: stats.completed ?? 0, label: "Completed", color: "#10b981" },
   ];
 
@@ -179,7 +181,7 @@ const Dashboard = () => {
         <Grid item xs={6} sm={6} md={3}>
           <StatCard
             title="Inactive Students"
-            value={stats.inactive ?? 0}
+            value={stats.inActive ?? 0}
             change="-2.4%"
             icon={Cancel}
             color="#f59e0b"
