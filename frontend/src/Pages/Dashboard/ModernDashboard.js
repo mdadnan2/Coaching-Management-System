@@ -106,6 +106,7 @@ const Dashboard = () => {
       
       console.log('Stats API Response:', statsRes.data);
       console.log('Stats Data:', statsRes.data.data);
+      console.log('Students Data:', studentsRes.data.data);
       
       setStats(statsRes.data.data);
       setStudents(studentsRes.data.data);
@@ -130,7 +131,7 @@ const Dashboard = () => {
   })).slice(0, 4);
 
   const recentActivities = students.slice(0, 5).map(student => {
-    const formattedDate = student.createdDate 
+    const formattedDate = student.createdDate
       ? new Date(student.createdDate).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) 
       : 'Invalid Date';
     
