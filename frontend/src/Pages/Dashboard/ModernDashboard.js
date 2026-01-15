@@ -127,12 +127,17 @@ const Dashboard = () => {
     value: Math.floor(Math.random() * 40) + 60 // Random for now, replace with actual progress
   })).slice(0, 4);
 
-  const recentActivities = students.slice(0, 4).map(student => ({
-    name: student.studentname,
-    action: student.selectCourse ? `Enrolled in ${student.selectCourse}` : 'Registered',
-    time: new Date(student.createdDate).toLocaleDateString(),
-    avatar: student.studentname.charAt(0).toUpperCase()
-  }));
+  const recentActivities = students.slice(0, 5).map(student => {
+    const joinDate = student.dateOfJoining || student.createdDate;
+    const formattedDate = joinDate ? new Date(joinDate).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) : 'N/A';
+    
+    return {
+      name: student.studentname,
+      action: student.selectCourse ? `Enrolled in ${student.selectCourse}` : 'Registered',
+      time: formattedDate,
+      avatar: student.studentname.charAt(0).toUpperCase()
+    };
+  });
 
   if (loading) {
     return <Box sx={{ p: 3 }}><Typography>Loading...</Typography></Box>;
@@ -255,7 +260,6 @@ const Dashboard = () => {
           <Card sx={{ p: 3, border: '1px solid', borderColor: 'divider', boxShadow: '0 1px 3px rgba(0,0,0,0.05)' }}>
             <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
               <Typography variant="h6" fontWeight={600}>Recent Activity</Typography>
-              <Chip label="Live" size="small" color="success" />
             </Box>
             {recentActivities.length > 0 ? (
               recentActivities.map((activity, i) => (
