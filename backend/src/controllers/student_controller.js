@@ -30,10 +30,10 @@ exports.getStudent = (req, res, next) => {
 // Total Active Student count
 exports.studentsRecStatus = async (req, res, next) => {
     try {
-        const totalStudents = await studentSchema.find({ role: "student" }).count();
-        const activeStudents = await studentSchema.find({ role: "student", recStatus: 'active' }).count();
-        const deActiveStudents = await studentSchema.find({ role: "student", recStatus: 'In_Active' }).count();
-        const completedStudents = await studentSchema.find({ role: "student", recStatus: 'courseCompleted' }).count();
+        const totalStudents = await studentSchema.countDocuments({ role: "student" });
+        const activeStudents = await studentSchema.countDocuments({ role: "student", recStatus: 'active' });
+        const deActiveStudents = await studentSchema.countDocuments({ role: "student", recStatus: 'In_Active' });
+        const completedStudents = await studentSchema.countDocuments({ role: "student", recStatus: 'courseCompleted' });
         res.status(STATUS.success).send(resObject(STATUS.success, general.activeStudents, { total: totalStudents, active: activeStudents, inActive: deActiveStudents, completed: completedStudents }));
     } catch (error) {
         console.error(error);
