@@ -23,6 +23,7 @@ const MultiStepAdmission = ({ onSubmit, sendStudentData }) => {
     address: "",
     password: "",
     studentId: "",
+    recStatus: "active",
   });
   const [showPassword, setShowPassword] = useState(false);
 
@@ -129,6 +130,14 @@ const MultiStepAdmission = ({ onSubmit, sendStudentData }) => {
               </Select>
             </FormControl>
             <TextField label="Date of Joining" name="dateOfJoining" type="date" value={formData.dateOfJoining} onChange={handleChange} InputLabelProps={{ shrink: true }} fullWidth size="small" />
+            <FormControl fullWidth size="small">
+              <InputLabel>Course Status</InputLabel>
+              <Select name="recStatus" value={formData.recStatus} onChange={handleChange} label="Course Status">
+                <MenuItem value="active">Active</MenuItem>
+                <MenuItem value="In_Active">Inactive</MenuItem>
+                <MenuItem value="courseCompleted">Course Completed</MenuItem>
+              </Select>
+            </FormControl>
           </Box>
         );
       default:
