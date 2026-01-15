@@ -128,8 +128,9 @@ const Dashboard = () => {
   })).slice(0, 4);
 
   const recentActivities = students.slice(0, 5).map(student => {
-    const joinDate = student.dateOfJoining || student.createdDate;
-    const formattedDate = joinDate ? new Date(joinDate).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) : 'N/A';
+    const formattedDate = student.createdDate 
+      ? new Date(student.createdDate).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) 
+      : 'Invalid Date';
     
     return {
       name: student.studentname,

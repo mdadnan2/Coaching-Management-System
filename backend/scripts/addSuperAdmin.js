@@ -1,13 +1,11 @@
+require('dotenv').config({ path: require('path').join(__dirname, '../.env.development') });
 const mongoose = require('mongoose');
 const Student = require('../src/models/student');
 const { encryptString } = require('../src/helpers/security');
 
-// Database connection
-const DB_CONNECTION_STRING = 'mongodb+srv://adnan9:Pune123@cluster0.lfm5r5d.mongodb.net/Coaching_management';
-
 const addSuperAdmin = async () => {
     try {
-        await mongoose.connect(DB_CONNECTION_STRING);
+        await mongoose.connect(process.env.DB_CONNECTION_STRING);
         console.log('Connected to MongoDB');
 
         // Check if super admin already exists
