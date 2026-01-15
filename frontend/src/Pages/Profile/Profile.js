@@ -9,13 +9,36 @@ import instance from "../../apis/apiRequest";
 const Profile = () => {
   const { darkMode, toggleDarkMode } = useDarkMode();
   const [editing, setEditing] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [profile, setProfile] = useState({
-    name: "Admin User",
-    email: "admin@coaching.com",
-    phone: "9999999999",
-    role: "Administrator",
+    name: "",
+    email: "",
+    phone: "",
+    role: "",
     photo: ""
   });
+
+  useEffect(() => {
+    fetchProfile();
+  }, []);
+
+  const fetchProfile = async () => {
+    try {
+      const response = await instance.get('/student/profile');
+      const data = response.data.data;
+      setProfile({
+        name: data.studentname || "",
+        email: data.email || "",
+        phone: data.phoneNumber || "",
+        role: data.role || "student",
+        photo: localStorage.getItem('profilePhoto') || ""
+      });
+    } catch (error) {
+      toast.error('Failed to load profile');
+    } finally {
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
     const savedPhoto = localStorage.getItem('profilePhoto');
@@ -91,6 +114,11 @@ const Profile = () => {
 
   return (
     <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.3 }}>
+      {loading ? (
+        <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '400px' }}>
+          <Typography>Loading profile...</Typography>
+        </Box>
+      ) : (
       <Box sx={{ maxWidth: 1200, mx: "auto" }}>
         <Box sx={{ mb: { xs: 3, sm: 4 } }}>
           <Typography variant="h4" fontWeight={700} sx={{ mb: 1, fontSize: { xs: '1.75rem', sm: '2.125rem' } }}>
@@ -293,6 +321,7 @@ const Profile = () => {
           </Card>
         </Stack>
       </Box>
+      )}
     </motion.div>
   );
 };

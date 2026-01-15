@@ -263,3 +263,20 @@ exports.changePassword = async (req, res) => {
         res.status(STATUS.internalServerError).send(resObject(STATUS.internalServerError, general.internalServerError, error));
     }
 };
+
+// Get current user profile
+exports.getCurrentProfile = async (req, res) => {
+    try {
+        const studentEmail = req.payload?.email;
+        const student = await studentSchema.findOne({ email: studentEmail }).select(excludeFields.general);
+        
+        if (!student) {
+            return res.status(STATUS.badRequest).send(resObject(STATUS.badRequest, 'Student not found'));
+        }
+
+        res.status(STATUS.Success).send(resObject(STATUS.Success, 'Profile retrieved', student));
+    } catch (error) {
+        console.error(error);
+        res.status(STATUS.internalServerError).send(resObject(STATUS.internalServerError, general.internalServerError, error));
+    }
+};
