@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Box, Drawer, List, ListItem, ListItemButton, ListItemIcon, ListItemText, AppBar, Toolbar, Typography, IconButton, Avatar, Menu, MenuItem, Divider, Switch } from "@mui/material";
-import { Dashboard, AccountCircle, LibraryBooks, Logout, Menu as MenuIcon, DarkMode, LightMode, Settings, Person } from "@mui/icons-material";
+import { Dashboard, AccountCircle, LibraryBooks, Logout, Menu as MenuIcon, DarkMode, LightMode, Settings, Person, ChevronLeft, ChevronRight } from "@mui/icons-material";
 import { NavLink, useLocation } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { logout } from "../reducers/LoginSlice";
@@ -8,6 +8,7 @@ import { useDarkMode } from "../theme/DarkModeProvider";
 import { motion } from "framer-motion";
 
 const drawerWidth = 240;
+const collapsedWidth = 70;
 
 const menuItems = [
   { path: "/", name: "Dashboard", icon: <Dashboard /> },
@@ -18,6 +19,7 @@ const menuItems = [
 
 export default function ModernSidebar({ children }) {
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [collapsed, setCollapsed] = useState(false);
   const [anchorEl, setAnchorEl] = useState(null);
   const location = useLocation();
   const dispatch = useDispatch();
@@ -33,24 +35,36 @@ export default function ModernSidebar({ children }) {
     dispatch(logout());
   };
 
-  const drawer = (
+  const drawer = (isMobile = false) => (
     <Box sx={{ height: '100%', display: 'flex', flexDirection: 'column', bgcolor: 'background.paper' }}>
-      <Box sx={{ p: 3, display: 'flex', alignItems: 'center', gap: 1 }}>
-        <LibraryBooks sx={{ color: 'primary.main', fontSize: 32 }} />
-        <Typography variant="h6" fontWeight={700}>
-          Coaching
-        </Typography>
+      <Box sx={{ p: (!isMobile && collapsed) ? 1.5 : 3, display: 'flex', alignItems: 'center', justifyContent: (!isMobile && collapsed) ? 'center' : 'space-between', gap: 1 }}>
+        {(isMobile || !collapsed) && (
+          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+            <LibraryBooks sx={{ color: 'primary.main', fontSize: 32 }} />
+            <Typography variant="h6" fontWeight={700}>
+              Coaching
+            </Typography>
+          </Box>
+        )}
+        {!isMobile && collapsed && <LibraryBooks sx={{ color: 'primary.main', fontSize: 32 }} />}
+        {!isMobile && (
+          <IconButton onClick={() => setCollapsed(!collapsed)} size="small">
+            {collapsed ? <ChevronRight /> : <ChevronLeft />}
+          </IconButton>
+        )}
       </Box>
       <Divider />
-      <List sx={{ flex: 1, px: 2, py: 2 }}>
+      <List sx={{ flex: 1, px: (!isMobile && collapsed) ? 1 : 2, py: 2 }}>
         {menuItems.map((item) => (
           <ListItem key={item.name} disablePadding sx={{ mb: 0.5 }}>
             <ListItemButton
               component={NavLink}
               to={item.path}
+              onClick={isMobile ? handleDrawerToggle : undefined}
               sx={{
                 borderRadius: 2,
                 transition: 'all 0.2s',
+                justifyContent: (!isMobile && collapsed) ? 'center' : 'flex-start',
                 '&.active': {
                   bgcolor: 'primary.main',
                   color: 'white',
@@ -62,10 +76,10 @@ export default function ModernSidebar({ children }) {
                 }
               }}
             >
-              <ListItemIcon sx={{ minWidth: 40, color: 'text.secondary' }}>
+              <ListItemIcon sx={{ minWidth: (!isMobile && collapsed) ? 0 : 40, color: 'text.secondary', justifyContent: 'center' }}>
                 {item.icon}
               </ListItemIcon>
-              <ListItemText primary={item.name} />
+              {(isMobile || !collapsed) && <ListItemText primary={item.name} />}
             </ListItemButton>
           </ListItem>
         ))}
@@ -79,12 +93,13 @@ export default function ModernSidebar({ children }) {
         position="fixed"
         elevation={0}
         sx={{
-          width: { md: `calc(100% - ${drawerWidth}px)` },
-          ml: { md: `${drawerWidth}px` },
+          width: { md: `calc(100% - ${collapsed ? collapsedWidth : drawerWidth}px)` },
+          ml: { md: `${collapsed ? collapsedWidth : drawerWidth}px` },
           bgcolor: 'background.paper',
           borderBottom: '1px solid',
           borderColor: 'divider',
           backdropFilter: 'blur(8px)',
+          transition: 'all 0.3s',
         }}
       >
         <Toolbar>
@@ -115,7 +130,7 @@ export default function ModernSidebar({ children }) {
         </Toolbar>
       </AppBar>
 
-      <Box component="nav" sx={{ width: { md: drawerWidth }, flexShrink: { md: 0 } }}>
+      <Box component="nav" sx={{ width: { md: collapsed ? collapsedWidth : drawerWidth }, flexShrink: { md: 0 }, transition: 'width 0.3s' }}>
         <Drawer
           variant="temporary"
           open={mobileOpen}
@@ -126,27 +141,35 @@ export default function ModernSidebar({ children }) {
             '& .MuiDrawer-paper': { width: drawerWidth, boxSizing: 'border-box' },
           }}
         >
-          {drawer}
+          {drawer(true)}
         </Drawer>
         <Drawer
           variant="permanent"
           sx={{
             display: { xs: 'none', md: 'block' },
-            '& .MuiDrawer-paper': { width: drawerWidth, boxSizing: 'border-box', borderRight: 1, borderColor: 'divider' },
+            '& .MuiDrawer-paper': { 
+              width: collapsed ? collapsedWidth : drawerWidth, 
+              boxSizing: 'border-box', 
+              borderRight: 1, 
+              borderColor: 'divider',
+              transition: 'width 0.3s',
+              overflowX: 'hidden'
+            },
           }}
           open
         >
-          {drawer}
+          {drawer(false)}
         </Drawer>
       </Box>
 
       <Box component="main" sx={{ 
         flexGrow: 1, 
         p: { xs: 2, sm: 2, md: 3 }, 
-        width: { md: `calc(100% - ${drawerWidth}px)` }, 
+        width: { md: `calc(100% - ${collapsed ? collapsedWidth : drawerWidth}px)` }, 
         bgcolor: 'background.default', 
         minHeight: '100vh',
-        overflowX: 'hidden'
+        overflowX: 'hidden',
+        transition: 'all 0.3s'
       }}>
         <Toolbar />
         <motion.div
