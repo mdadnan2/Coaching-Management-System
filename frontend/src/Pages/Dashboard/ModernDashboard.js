@@ -1,9 +1,7 @@
 import React, { useState, useEffect } from "react";
-import { Box, Card, Typography, Grid, Avatar, LinearProgress, Chip, IconButton, Paper } from "@mui/material";
-import { TrendingUp, TrendingDown, People, School, CheckCircle, Cancel, MoreVert, CalendarMonth, LibraryBooks } from "@mui/icons-material";
+import { Box, Card, Typography, Grid, Avatar, LinearProgress, Chip } from "@mui/material";
+import { TrendingUp, TrendingDown, People, School, CheckCircle, Cancel, LibraryBooks } from "@mui/icons-material";
 import { PieChart } from "@mui/x-charts/PieChart";
-import { BarChart } from "@mui/x-charts/BarChart";
-import { LineChart } from "@mui/x-charts/LineChart";
 import { motion } from "framer-motion";
 import instance from "../../apis/apiRequest";
 import toast from "react-hot-toast";

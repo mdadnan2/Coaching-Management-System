@@ -3,7 +3,7 @@ import React, { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { Add, Edit, Delete } from "@mui/icons-material";
 import instance from "../../../apis/apiRequest";
-import { Chapter, AddChapter as AddChapterEndpoint, UpdateChapter } from "../../../apis/apiContsants";
+import { Chapter } from "../../../apis/apiContsants";
 import { EmptyState, LoadingOverlay } from "../../../components/common";
 import toast from "react-hot-toast";
 import { motion } from "framer-motion";
@@ -16,6 +16,7 @@ const AddChapter = () => {
 
   useEffect(() => {
     getChapters();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const getChapters = () => {

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Box, Drawer, List, ListItem, ListItemButton, ListItemIcon, ListItemText, AppBar, Toolbar, Typography, IconButton, Avatar, Menu, MenuItem, Divider, Switch } from "@mui/material";
+import { Box, Drawer, List, ListItem, ListItemButton, ListItemIcon, ListItemText, AppBar, Toolbar, Typography, IconButton, Avatar, Menu, MenuItem, Divider } from "@mui/material";
 import { Dashboard, AccountCircle, LibraryBooks, Logout, Menu as MenuIcon, DarkMode, LightMode, Settings, Person, ChevronLeft, ChevronRight } from "@mui/icons-material";
 import { NavLink, useLocation } from "react-router-dom";
 import { useDispatch } from "react-redux";
