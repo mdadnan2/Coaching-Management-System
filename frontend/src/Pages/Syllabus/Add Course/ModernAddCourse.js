@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Box, Button, Card, Typography, IconButton, Dialog, DialogContent, TextField, InputAdornment } from "@mui/material";
-import { Add, Edit, Delete, Visibility, Search, Download } from "@mui/icons-material";
+import { Add, Edit, Delete, Visibility, Search, Download, Warning } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
 import instance from "../../../apis/apiRequest";
 import { Add_Course, Course, Update_Course } from "../../../apis/apiContsants";
@@ -57,18 +57,19 @@ const ModernAddCourse = () => {
     setOpen(true);
   };
 
+  const [deleteDialog, setDeleteDialog] = useState({ open: false, id: null });
+
   const handleDelete = (id) => {
-    if (window.confirm("Delete this course?")) {
-      instance.delete(Course + id)
-        .then(() => {
-          toast.success("Course deleted");
-          getCourses();
-        })
-        .catch((err) => {
-          console.error(err);
-          toast.error("Failed to delete course");
-        });
-    }
+    instance.delete(Course + id)
+      .then(() => {
+        toast.success("Course deleted successfully!");
+        getCourses();
+        setDeleteDialog({ open: false, id: null });
+      })
+      .catch((err) => {
+        console.error(err);
+        toast.error("Failed to delete course");
+      });
   };
 
   const handleExport = () => {
@@ -180,7 +181,7 @@ const ModernAddCourse = () => {
                     <IconButton size="small" color="primary" onClick={() => handleEdit(course)}>
                       <Edit fontSize="small" />
                     </IconButton>
-                    <IconButton size="small" color="error" onClick={() => handleDelete(course._id)}>
+                    <IconButton size="small" color="error" onClick={() => setDeleteDialog({ open: true, id: course._id })}>
                       <Delete fontSize="small" />
                     </IconButton>
                   </Box>
@@ -224,6 +225,24 @@ const ModernAddCourse = () => {
               </form>
             </Box>
           </DialogContent>
+        </Dialog>
+
+        <Dialog open={deleteDialog.open} onClose={() => setDeleteDialog({ open: false, id: null })} maxWidth="xs" fullWidth>
+          <Box sx={{ p: 3, bgcolor: '#fef2f2' }}>
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, mb: 2 }}>
+              <Warning sx={{ color: '#ef4444', fontSize: 28 }} />
+              <Typography variant="h6" fontWeight={600} sx={{ color: '#ef4444' }}>
+                Delete Course?
+              </Typography>
+            </Box>
+            <Typography variant="body2" sx={{ mb: 3, ml: 5, color: '#374151', fontWeight: 500 }}>
+              This will permanently delete the course and all its chapters. This action cannot be undone.
+            </Typography>
+            <Box sx={{ display: 'flex', gap: 2, justifyContent: 'flex-end' }}>
+              <Button onClick={() => setDeleteDialog({ open: false, id: null })} variant="outlined">Cancel</Button>
+              <Button onClick={() => handleDelete(deleteDialog.id)} sx={{ bgcolor: '#ef4444', '&:hover': { bgcolor: '#dc2626' } }} variant="contained">Delete</Button>
+            </Box>
+          </Box>
         </Dialog>
       </Box>
     </motion.div>

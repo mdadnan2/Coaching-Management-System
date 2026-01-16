@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Box, Drawer, List, ListItem, ListItemButton, ListItemIcon, ListItemText, AppBar, Toolbar, Typography, IconButton, Avatar, Menu, MenuItem, Divider } from "@mui/material";
+import { Box, Drawer, List, ListItem, ListItemButton, ListItemIcon, ListItemText, AppBar, Toolbar, Typography, IconButton, Avatar, Menu, MenuItem, Divider, Button } from "@mui/material";
 import { Dashboard, AccountCircle, LibraryBooks, Logout, Menu as MenuIcon, DarkMode, LightMode, Settings, Person, ChevronLeft, ChevronRight } from "@mui/icons-material";
 import { NavLink, useLocation } from "react-router-dom";
 import { useDispatch } from "react-redux";
@@ -37,7 +37,7 @@ export default function ModernSidebar({ children }) {
 
   const drawer = (isMobile = false) => (
     <Box sx={{ height: '100%', display: 'flex', flexDirection: 'column', bgcolor: 'background.paper' }}>
-      <Box sx={{ p: (!isMobile && collapsed) ? 1.5 : 3, display: 'flex', alignItems: 'center', justifyContent: (!isMobile && collapsed) ? 'center' : 'space-between', gap: 1 }}>
+      <Box sx={{ p: (!isMobile && collapsed) ? 1.5 : 3, display: 'flex', alignItems: 'center', justifyContent: (!isMobile && collapsed) ? 'center' : 'flex-start', gap: 1 }}>
         {(isMobile || !collapsed) && (
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
             <LibraryBooks sx={{ color: 'primary.main', fontSize: 32 }} />
@@ -47,11 +47,6 @@ export default function ModernSidebar({ children }) {
           </Box>
         )}
         {!isMobile && collapsed && <LibraryBooks sx={{ color: 'primary.main', fontSize: 32 }} />}
-        {!isMobile && (
-          <IconButton onClick={() => setCollapsed(!collapsed)} size="small">
-            {collapsed ? <ChevronRight /> : <ChevronLeft />}
-          </IconButton>
-        )}
       </Box>
       <Divider />
       <List sx={{ flex: 1, px: (!isMobile && collapsed) ? 1 : 2, py: 2 }}>
@@ -84,6 +79,26 @@ export default function ModernSidebar({ children }) {
           </ListItem>
         ))}
       </List>
+      {!isMobile && (
+        <>
+          <Divider />
+          <Box sx={{ p: 2, display: 'flex', justifyContent: 'center' }}>
+            <Button
+              onClick={() => setCollapsed(!collapsed)}
+              variant="outlined"
+              size="small"
+              startIcon={collapsed ? <ChevronRight /> : <ChevronLeft />}
+              fullWidth={!collapsed}
+              sx={{ 
+                minWidth: collapsed ? 40 : 'auto',
+                justifyContent: 'center'
+              }}
+            >
+              {!collapsed && 'Collapse'}
+            </Button>
+          </Box>
+        </>
+      )}
     </Box>
   );
 

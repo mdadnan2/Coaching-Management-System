@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Box, Button, Dialog, DialogContent, Paper, Table, TableBody, TableContainer, TableFooter, TableHead, TablePagination, TableRow, TextField, Typography, IconButton, Chip, Avatar, InputAdornment } from "@mui/material";
 import TableCell from "@mui/material/TableCell";
-import { Search, Add, Edit, Delete, Download } from "@mui/icons-material";
+import { Search, Add, Edit, Delete, Download, Warning } from "@mui/icons-material";
 import MultiStepAdmission from "../Addmission/MultiStepAdmission";
 import instance from "../../apis/apiRequest";
 import { student, RegisterStudent, Update } from "../../apis/apiContsants";
@@ -289,16 +289,19 @@ const Students = () => {
         </Dialog>
 
         <Dialog open={deleteOpen} onClose={() => setDeleteOpen(false)} maxWidth="xs" fullWidth>
-          <Box sx={{ p: 3 }}>
-            <Typography variant="h6" fontWeight={600} sx={{ mb: 2 }}>
-              Delete Student
-            </Typography>
-            <Typography variant="body2" color="text.secondary" sx={{ mb: 3 }}>
-              Are you sure you want to delete this student? This action cannot be undone.
+          <Box sx={{ p: 3, bgcolor: '#fef2f2' }}>
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, mb: 2 }}>
+              <Warning sx={{ color: '#ef4444', fontSize: 28 }} />
+              <Typography variant="h6" fontWeight={600} sx={{ color: '#ef4444' }}>
+                Delete Student?
+              </Typography>
+            </Box>
+            <Typography variant="body2" sx={{ mb: 3, ml: 5, color: '#374151', fontWeight: 500 }}>
+              This will permanently delete the student and all their records. This action cannot be undone.
             </Typography>
             <Box sx={{ display: 'flex', gap: 2, justifyContent: 'flex-end' }}>
-              <Button onClick={() => setDeleteOpen(false)}>Cancel</Button>
-              <Button onClick={handleDelete} color="error" variant="contained">Delete</Button>
+              <Button onClick={() => setDeleteOpen(false)} variant="outlined">Cancel</Button>
+              <Button onClick={handleDelete} sx={{ bgcolor: '#ef4444', '&:hover': { bgcolor: '#dc2626' } }} variant="contained">Delete</Button>
             </Box>
           </Box>
         </Dialog>

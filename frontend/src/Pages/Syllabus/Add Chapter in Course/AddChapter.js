@@ -1,7 +1,7 @@
-import { Box, Button, Card, Typography, IconButton, Chip } from "@mui/material";
+import { Box, Button, Card, Typography, IconButton, Chip, Dialog } from "@mui/material";
 import React, { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { Add, Edit, Delete } from "@mui/icons-material";
+import { Add, Edit, Delete, Warning } from "@mui/icons-material";
 import instance from "../../../apis/apiRequest";
 import { Chapter } from "../../../apis/apiContsants";
 import { EmptyState, LoadingOverlay } from "../../../components/common";
@@ -12,6 +12,7 @@ const AddChapter = () => {
   const { id: courseId } = useParams();
   const [chapters, setChapters] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [deleteDialog, setDeleteDialog] = useState({ open: false, id: null });
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -31,17 +32,16 @@ const AddChapter = () => {
   };
 
   const handleDelete = (id) => {
-    if (window.confirm("Delete this chapter?")) {
-      instance.delete(Chapter + id)
-        .then(() => {
-          toast.success("Chapter deleted");
-          getChapters();
-        })
-        .catch((err) => {
-          console.error(err);
-          toast.error("Failed to delete chapter");
-        });
-    }
+    instance.delete(Chapter + id)
+      .then(() => {
+        toast.success("Chapter deleted successfully!");
+        getChapters();
+        setDeleteDialog({ open: false, id: null });
+      })
+      .catch((err) => {
+        console.error(err);
+        toast.error("Failed to delete chapter");
+      });
   };
 
   if (loading) return <LoadingOverlay message="Loading chapters..." />;
@@ -144,7 +144,7 @@ const AddChapter = () => {
                     <IconButton size="small" color="primary" onClick={() => navigate(`/syllabusForm/${courseId}`, { state: { chapter } })}>
                       <Edit fontSize="small" />
                     </IconButton>
-                    <IconButton size="small" color="error" onClick={() => handleDelete(chapter._id)}>
+                    <IconButton size="small" color="error" onClick={() => setDeleteDialog({ open: true, id: chapter._id })}>
                       <Delete fontSize="small" />
                     </IconButton>
                   </Box>
@@ -153,6 +153,24 @@ const AddChapter = () => {
             ))}
           </Box>
         )}
+
+        <Dialog open={deleteDialog.open} onClose={() => setDeleteDialog({ open: false, id: null })} maxWidth="xs" fullWidth>
+          <Box sx={{ p: 3, bgcolor: '#fef2f2' }}>
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, mb: 2 }}>
+              <Warning sx={{ color: '#ef4444', fontSize: 28 }} />
+              <Typography variant="h6" fontWeight={600} sx={{ color: '#ef4444' }}>
+                Delete Chapter?
+              </Typography>
+            </Box>
+            <Typography variant="body2" sx={{ mb: 3, ml: 5, color: '#374151', fontWeight: 500 }}>
+              This will permanently delete the chapter and all its content. This action cannot be undone.
+            </Typography>
+            <Box sx={{ display: 'flex', gap: 2, justifyContent: 'flex-end' }}>
+              <Button onClick={() => setDeleteDialog({ open: false, id: null })} variant="outlined">Cancel</Button>
+              <Button onClick={() => handleDelete(deleteDialog.id)} sx={{ bgcolor: '#ef4444', '&:hover': { bgcolor: '#dc2626' } }} variant="contained">Delete</Button>
+            </Box>
+          </Box>
+        </Dialog>
       </Box>
     </motion.div>
   );
