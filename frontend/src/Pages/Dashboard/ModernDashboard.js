@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Box, Card, Typography, Grid, Avatar, LinearProgress, Chip } from "@mui/material";
+import { Box, Card, Typography, Grid, Avatar, Chip } from "@mui/material";
 import { TrendingUp, TrendingDown, People, School, CheckCircle, Cancel, LibraryBooks } from "@mui/icons-material";
 import { PieChart } from "@mui/x-charts/PieChart";
 import { motion } from "framer-motion";
@@ -47,25 +47,6 @@ const StatCard = ({ title, value, change, icon: Icon, color, trend }) => (
       </Typography>
     </Card>
   </motion.div>
-);
-
-const QuickStat = ({ label, value, color }) => (
-  <Box sx={{ mb: 2 }}>
-    <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 1 }}>
-      <Typography variant="body2" color="text.secondary">{label}</Typography>
-      <Typography variant="body2" fontWeight={600}>{value}%</Typography>
-    </Box>
-    <LinearProgress 
-      variant="determinate" 
-      value={value} 
-      sx={{ 
-        height: 6, 
-        borderRadius: 3,
-        bgcolor: `${color}15`,
-        '& .MuiLinearProgress-bar': { bgcolor: color }
-      }}
-    />
-  </Box>
 );
 
 const RecentActivity = ({ name, action, time, avatar }) => (
@@ -122,11 +103,6 @@ const Dashboard = () => {
     { id: 1, value: stats.inActive ?? 0, label: "Inactive", color: "#f59e0b" },
     { id: 2, value: stats.completed ?? 0, label: "Completed", color: "#10b981" },
   ];
-
-  const courseProgress = courses.map(course => ({
-    label: course.title,
-    value: Math.floor(Math.random() * 40) + 60 // Random for now, replace with actual progress
-  })).slice(0, 4);
 
   const recentActivities = students.slice(0, 5).map(student => {
     const formattedDate = student.createdDate
