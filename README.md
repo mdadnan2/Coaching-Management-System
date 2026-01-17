@@ -4,7 +4,7 @@
 
 ## 🌐 Live Demo
 
-**Live URL:** [https://tiffin360.vercel.app/](https://tiffin360.vercel.app/)
+**Live URL:** [https://coaching360.vercel.app/](https://coaching360.vercel.app/)
 
 ---
 
