@@ -49,15 +49,21 @@ const StatCard = ({ title, value, change, icon: Icon, color, trend }) => (
   </motion.div>
 );
 
-const RecentActivity = ({ name, action, time, avatar }) => (
-  <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, py: 1.5, borderBottom: '1px solid', borderColor: 'divider' }}>
-    <Avatar sx={{ bgcolor: 'primary.main', width: 36, height: 36 }}>{avatar}</Avatar>
-    <Box sx={{ flex: 1 }}>
-      <Typography variant="body2" fontWeight={500}>{name}</Typography>
-      <Typography variant="caption" color="text.secondary">{action}</Typography>
+const RecentActivity = ({ name, action, time, avatar, index }) => (
+  <motion.div
+    initial={{ opacity: 0, x: -20 }}
+    animate={{ opacity: 1, x: 0 }}
+    transition={{ duration: 0.3, delay: index * 0.1 }}
+  >
+    <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, py: 1.5, borderBottom: '1px solid', borderColor: 'divider' }}>
+      <Avatar sx={{ bgcolor: 'primary.main', width: 36, height: 36 }}>{avatar}</Avatar>
+      <Box sx={{ flex: 1 }}>
+        <Typography variant="body2" fontWeight={500}>{name}</Typography>
+        <Typography variant="caption" color="text.secondary">{action}</Typography>
+      </Box>
+      <Typography variant="caption" color="text.secondary">{time}</Typography>
     </Box>
-    <Typography variant="caption" color="text.secondary">{time}</Typography>
-  </Box>
+  </motion.div>
 );
 
 const Dashboard = () => {
@@ -216,16 +222,23 @@ const Dashboard = () => {
             </Typography>
             {courses.length > 0 ? (
               <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
-                {courses.map((course) => (
-                  <Box key={course._id} sx={{ display: 'flex', alignItems: 'center', gap: 2, p: 2, bgcolor: 'background.default', borderRadius: 2 }}>
-                    <Avatar sx={{ bgcolor: 'primary.main' }}>
-                      <LibraryBooks />
-                    </Avatar>
-                    <Box sx={{ flex: 1 }}>
-                      <Typography variant="body2" fontWeight={600}>{course.title}</Typography>
-                      <Typography variant="caption" color="text.secondary">{course.description}</Typography>
+                {courses.map((course, index) => (
+                  <motion.div
+                    key={course._id}
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.3, delay: index * 0.1 }}
+                  >
+                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, p: 2, bgcolor: 'background.default', borderRadius: 2 }}>
+                      <Avatar sx={{ bgcolor: 'primary.main' }}>
+                        <LibraryBooks />
+                      </Avatar>
+                      <Box sx={{ flex: 1 }}>
+                        <Typography variant="body2" fontWeight={600}>{course.title}</Typography>
+                        <Typography variant="caption" color="text.secondary">{course.description}</Typography>
+                      </Box>
                     </Box>
-                  </Box>
+                  </motion.div>
                 ))}
               </Box>
             ) : (
@@ -241,7 +254,7 @@ const Dashboard = () => {
             </Box>
             {recentActivities.length > 0 ? (
               recentActivities.map((activity, i) => (
-                <RecentActivity key={i} {...activity} />
+                <RecentActivity key={i} {...activity} index={i} />
               ))
             ) : (
               <Typography variant="body2" color="text.secondary" sx={{ py: 2 }}>No recent activity</Typography>

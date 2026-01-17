@@ -210,8 +210,15 @@ const Students = () => {
                 </TableBody>
               ) : (
                 <TableBody>
-                  {filteredData.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => (
-                    <TableRow key={row._id} hover sx={{ '&:hover': { bgcolor: 'action.hover' } }}>
+                  {filteredData.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row, index) => (
+                    <motion.tr
+                      key={row._id}
+                      component="tr"
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ duration: 0.3, delay: index * 0.05 }}
+                      style={{ display: 'table-row' }}
+                    >
                       <TableCell>
                         <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
                           <Avatar sx={{ bgcolor: 'primary.main' }}>
@@ -259,7 +266,7 @@ const Students = () => {
                           <Delete fontSize="small" />
                         </IconButton>
                       </TableCell>
-                    </TableRow>
+                    </motion.tr>
                   ))}
                 </TableBody>
               )}
