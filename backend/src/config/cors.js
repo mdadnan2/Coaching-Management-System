@@ -5,8 +5,13 @@ const corsOptions = {
   origin: (origin, callback) => {
     const allowedOrigins = config.cors.origin.split(',').map(o => o.trim());
     
-    // Allow requests with no origin (mobile apps, Postman, etc.)
+    // Allow requests with no origin (mobile apps, Postman, Swagger UI, etc.)
     if (!origin) return callback(null, true);
+    
+    // Allow localhost for development
+    if (origin.includes('localhost') || origin.includes('127.0.0.1')) {
+      return callback(null, true);
+    }
     
     if (allowedOrigins.indexOf(origin) !== -1 || allowedOrigins.includes('*')) {
       callback(null, true);

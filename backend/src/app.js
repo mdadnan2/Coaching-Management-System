@@ -5,6 +5,7 @@ const config = require("./config/env");
 const connectDB = require("./config/database");
 const corsMiddleware = require("./config/cors");
 const { setupRouters } = require("./routes/index");
+const { specs, swaggerUi } = require('./config/swagger');
 
 const app = express();
 
@@ -21,12 +22,20 @@ app.use(corsMiddleware);
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
+// Swagger Documentation
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(specs, {
+  explorer: true,
+  customCss: '.swagger-ui .topbar { display: none }',
+  customSiteTitle: 'Coaching Management API Documentation'
+}));
+
 // Health check endpoint
 app.get('/health', (req, res) => {
   res.status(200).json({ 
     status: 'OK', 
     environment: config.env,
-    timestamp: new Date().toISOString() 
+    timestamp: new Date().toISOString(),
+    documentation: '/api-docs'
   });
 });
 
