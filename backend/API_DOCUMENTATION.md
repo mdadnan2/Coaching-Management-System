@@ -9,7 +9,7 @@ This project now includes comprehensive Swagger/OpenAPI 3.0 documentation for al
 Once the server is running, you can access the interactive API documentation at:
 
 - **Development:** `http://localhost:5010/api-docs`
-- **Production:** `https://coaching360.vercel.app/api-docs`
+- **Production:** `https://coaching-management-system-70i3.onrender.com/api-docs`
 
 ### 🛠️ Installation
 

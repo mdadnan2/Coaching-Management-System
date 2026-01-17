@@ -25,7 +25,7 @@ const options = {
         description: 'Development server'
       },
       {
-        url: 'https://coaching360.vercel.app',
+        url: 'https://coaching-management-system-70i3.onrender.com',
         description: 'Production server'
       }
     ],
