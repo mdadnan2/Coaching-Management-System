@@ -1,5 +1,8 @@
 const path = require('path');
-require('dotenv').config({ path: path.join(__dirname, '../../.env.development') });
+
+// Load environment-specific config
+const envFile = process.env.NODE_ENV === 'production' ? '.env.production' : '.env.development';
+require('dotenv').config({ path: path.join(__dirname, `../../${envFile}`) });
 
 module.exports = {
   env: process.env.NODE_ENV || 'development',
