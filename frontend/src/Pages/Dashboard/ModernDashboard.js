@@ -55,8 +55,38 @@ const RecentActivity = ({ name, action, time, avatar, index }) => (
     animate={{ opacity: 1, x: 0 }}
     transition={{ duration: 0.3, delay: index * 0.1 }}
   >
-    <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, py: 1.5, borderBottom: '1px solid', borderColor: 'divider' }}>
-      <Avatar sx={{ bgcolor: 'primary.main', width: 36, height: 36 }}>{avatar}</Avatar>
+    <Box sx={{ 
+      display: 'flex', 
+      alignItems: 'center', 
+      gap: 2, 
+      py: 1.5, 
+      px: 2,
+      borderBottom: '1px solid', 
+      borderColor: 'divider',
+      borderRadius: 1,
+      cursor: 'pointer',
+      transition: 'all 0.3s ease',
+      '&:hover': {
+        transform: 'translateY(-2px)',
+        boxShadow: '0 4px 12px rgba(0,0,0,0.1)',
+        bgcolor: 'primary.main',
+        color: 'primary.contrastText',
+        '& .MuiAvatar-root': {
+          bgcolor: 'background.paper',
+          color: 'primary.main',
+          transform: 'scale(1.1)'
+        },
+        '& .MuiTypography-root': {
+          color: 'inherit'
+        }
+      }
+    }}>
+      <Avatar sx={{ 
+        bgcolor: 'primary.main', 
+        width: 36, 
+        height: 36,
+        transition: 'all 0.3s ease'
+      }}>{avatar}</Avatar>
       <Box sx={{ flex: 1 }}>
         <Typography variant="body2" fontWeight={500}>{name}</Typography>
         <Typography variant="caption" color="text.secondary">{action}</Typography>
@@ -229,8 +259,34 @@ const Dashboard = () => {
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.3, delay: index * 0.1 }}
                   >
-                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, p: 2, bgcolor: 'background.default', borderRadius: 2 }}>
-                      <Avatar sx={{ bgcolor: 'primary.main' }}>
+                    <Box sx={{ 
+                      display: 'flex', 
+                      alignItems: 'center', 
+                      gap: 2, 
+                      p: 2, 
+                      bgcolor: 'background.default', 
+                      borderRadius: 2,
+                      cursor: 'pointer',
+                      transition: 'all 0.3s ease',
+                      '&:hover': {
+                        transform: 'translateY(-2px)',
+                        boxShadow: '0 4px 12px rgba(0,0,0,0.1)',
+                        bgcolor: 'primary.main',
+                        color: 'primary.contrastText',
+                        '& .MuiAvatar-root': {
+                          bgcolor: 'background.paper',
+                          color: 'primary.main',
+                          transform: 'scale(1.1)'
+                        },
+                        '& .MuiTypography-root': {
+                          color: 'inherit'
+                        }
+                      }
+                    }}>
+                      <Avatar sx={{ 
+                        bgcolor: 'primary.main',
+                        transition: 'all 0.3s ease'
+                      }}>
                         <LibraryBooks />
                       </Avatar>
                       <Box sx={{ flex: 1 }}>

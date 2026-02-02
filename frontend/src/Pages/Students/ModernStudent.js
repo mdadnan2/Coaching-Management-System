@@ -217,11 +217,42 @@ const Students = () => {
                       initial={{ opacity: 0, y: 20 }}
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ duration: 0.3, delay: index * 0.05 }}
-                      style={{ display: 'table-row' }}
+                      style={{ 
+                        display: 'table-row',
+                        cursor: 'pointer',
+                        transition: 'all 0.3s ease'
+                      }}
+                      sx={{
+                        '&:hover': {
+                          transform: 'translateY(-2px)',
+                          boxShadow: '0 4px 12px rgba(0,0,0,0.1)',
+                          bgcolor: 'primary.main',
+                          color: 'primary.contrastText',
+                          '& .MuiTableCell-root': {
+                            color: 'inherit',
+                            borderColor: 'transparent'
+                          },
+                          '& .MuiAvatar-root': {
+                            bgcolor: 'background.paper',
+                            color: 'primary.main',
+                            transform: 'scale(1.1)'
+                          },
+                          '& .MuiChip-root': {
+                            bgcolor: 'background.paper',
+                            color: 'primary.main'
+                          },
+                          '& .MuiIconButton-root': {
+                            color: 'inherit'
+                          }
+                        }
+                      }}
                     >
                       <TableCell>
                         <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-                          <Avatar sx={{ bgcolor: 'primary.main' }}>
+                          <Avatar sx={{ 
+                            bgcolor: 'primary.main',
+                            transition: 'all 0.3s ease'
+                          }}>
                             {row.studentname?.charAt(0).toUpperCase()}
                           </Avatar>
                           <Box>
