@@ -96,12 +96,27 @@ exports.registerStudent = async (req, res, next) => {
         const newStudent = new studentSchema({
             ...params,
             password: encryptString(req.body.password),
-            createdBy: req.payload?.email,
+            createdBy: req.payload?.email || 'self-registration',
             createdDate: new Date(),
         });
 
         await newStudent.save();
         const savedStudent = await studentSchema.findById(newStudent._id).select(excludeFields.general);
+
+        // Generate JWT token for auto-login
+        const tokenPayload = {
+            gender: savedStudent.gender,
+            studentId: savedStudent.studentId,
+            phoneNumber: savedStudent.phoneNumber,
+            address: savedStudent.address,
+            dateOfBirth: savedStudent.dateOfBirth,
+            dateOfJoining: savedStudent.dateOfJoining,
+            email: savedStudent.email,
+            selectCourse: savedStudent.selectCourse,
+            highestQualification: savedStudent.highestQualification,
+            role: savedStudent.role
+        };
+        const token = jwt.sign(tokenPayload, "secret_key", { expiresIn: '24h' });
 
         // Send welcome email (non-blocking)
         if (savedStudent.notificationSettings?.email) {
@@ -111,7 +126,7 @@ exports.registerStudent = async (req, res, next) => {
             });
         }
 
-        res.status(STATUS.created).send(resObject(STATUS.created, general.studentCreated, savedStudent));
+        res.status(STATUS.created).send(resObject(STATUS.created, general.studentCreated, { token, ...savedStudent.toObject() }));
 
     } catch (error) {
         console.error('Registration error:', error);

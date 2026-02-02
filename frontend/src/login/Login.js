@@ -4,19 +4,37 @@ import { entry } from "../reducers/LoginSlice";
 import { Box, Container, TextField, Button, Typography, Paper, InputAdornment, IconButton } from "@mui/material";
 import { Visibility, VisibilityOff, School } from "@mui/icons-material";
 import instance from "../apis/apiRequest";
-import { student_Login } from "../apis/apiContsants";
+import { student_Login, RegisterStudent } from "../apis/apiContsants";
 import toast from 'react-hot-toast';
 import { motion } from 'framer-motion';
 
 const Login = () => {
   const [cred, setCred] = useState({ email: "", password: "" });
+  const [regData, setRegData] = useState({ 
+    studentname: "", 
+    email: "", 
+    password: "", 
+    phoneNumber: "",
+    gender: "",
+    address: "",
+    dateOfBirth: "",
+    dateOfJoining: new Date().toISOString().split('T')[0],
+    highestQualification: "",
+    selectCourse: "",
+    studentId: ""
+  });
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+  const [isRegister, setIsRegister] = useState(false);
   const dispatch = useDispatch();
 
   const handleChange = (e) => {
-    setCred({ ...cred, [e.target.name]: e.target.value });
+    if (isRegister) {
+      setRegData({ ...regData, [e.target.name]: e.target.value });
+    } else {
+      setCred({ ...cred, [e.target.name]: e.target.value });
+    }
     setError("");
   };
 
@@ -24,13 +42,21 @@ const Login = () => {
     e.preventDefault();
     setLoading(true);
     try {
-      const response = await instance.post(student_Login, cred);
-      localStorage.setItem("coaching_app_auth_token", response.data.data.token);
-      toast.success('Welcome back!');
-      setTimeout(() => dispatch(entry()), 500);
+      if (isRegister) {
+        console.log('Registration payload:', regData);
+        const response = await instance.post(RegisterStudent, regData);
+        localStorage.setItem("coaching_app_auth_token", response.data.data.token);
+        toast.success('Registration successful! Welcome!');
+        setTimeout(() => dispatch(entry()), 500);
+      } else {
+        const response = await instance.post(student_Login, cred);
+        localStorage.setItem("coaching_app_auth_token", response.data.data.token);
+        toast.success('Welcome back!');
+        setTimeout(() => dispatch(entry()), 500);
+      }
     } catch (err) {
-      setError("Invalid email or password");
-      toast.error('Login failed. Please check your credentials.');
+      setError(isRegister ? "Registration failed. Please try again." : "Invalid email or password");
+      toast.error(isRegister ? 'Registration failed.' : 'Login failed. Please check your credentials.');
     } finally {
       setLoading(false);
     }
@@ -54,30 +80,121 @@ const Login = () => {
           <Box sx={{ textAlign: 'center', mb: 4 }}>
             <School sx={{ fontSize: 56, color: 'primary.main', mb: 2 }} />
             <Typography variant="h4" fontWeight={700} gutterBottom>
-              Welcome Back
+              {isRegister ? 'Create Account' : 'Welcome Back'}
             </Typography>
             <Typography variant="body2" color="text.secondary">
-              Sign in to your coaching account
+              {isRegister ? 'Join our coaching platform' : 'Sign in to your coaching account'}
             </Typography>
           </Box>
 
           <form onSubmit={handleSubmit}>
+            {isRegister && (
+              <>
+                <TextField
+                  fullWidth
+                  label="Full Name"
+                  name="studentname"
+                  value={regData.studentname}
+                  onChange={handleChange}
+                  required
+                  sx={{ mb: 2 }}
+                />
+                <TextField
+                  fullWidth
+                  label="Student ID"
+                  name="studentId"
+                  value={regData.studentId}
+                  onChange={handleChange}
+                  required
+                  sx={{ mb: 2 }}
+                />
+              </>
+            )}
             <TextField
               fullWidth
               label="Email"
               name="email"
               type="email"
-              value={cred.email}
+              value={isRegister ? regData.email : cred.email}
               onChange={handleChange}
               required
               sx={{ mb: 2 }}
             />
+            {isRegister && (
+              <>
+                <TextField
+                  fullWidth
+                  label="Phone Number"
+                  name="phoneNumber"
+                  value={regData.phoneNumber}
+                  onChange={handleChange}
+                  required
+                  sx={{ mb: 2 }}
+                />
+                <TextField
+                  fullWidth
+                  select
+                  label="Gender"
+                  name="gender"
+                  value={regData.gender}
+                  onChange={handleChange}
+                  required
+                  sx={{ mb: 2 }}
+                  SelectProps={{ native: true }}
+                >
+                  <option value=""></option>
+                  <option value="Male">Male</option>
+                  <option value="Female">Female</option>
+                  <option value="Other">Other</option>
+                </TextField>
+                <TextField
+                  fullWidth
+                  label="Address"
+                  name="address"
+                  value={regData.address}
+                  onChange={handleChange}
+                  required
+                  multiline
+                  rows={2}
+                  sx={{ mb: 2 }}
+                />
+                <TextField
+                  fullWidth
+                  label="Date of Birth"
+                  name="dateOfBirth"
+                  type="date"
+                  value={regData.dateOfBirth}
+                  onChange={handleChange}
+                  required
+                  InputLabelProps={{ shrink: true }}
+                  sx={{ mb: 2 }}
+                />
+                <TextField
+                  fullWidth
+                  label="Highest Qualification"
+                  name="highestQualification"
+                  value={regData.highestQualification}
+                  onChange={handleChange}
+                  required
+                  sx={{ mb: 2 }}
+                />
+                <TextField
+                  fullWidth
+                  label="Select Course"
+                  name="selectCourse"
+                  value={regData.selectCourse}
+                  onChange={handleChange}
+                  required
+                  sx={{ mb: 2 }}
+                />
+              </>
+            )}
             <TextField
               fullWidth
               label="Password"
               name="password"
               type={showPassword ? "text" : "password"}
-              value={cred.password}
+              value={isRegister ? regData.password : cred.password}
               onChange={handleChange}
               required
               sx={{ mb: 3 }}
@@ -104,9 +221,39 @@ const Login = () => {
               disabled={loading}
               sx={{ py: 1.5, fontWeight: 600 }}
             >
-              {loading ? 'Signing in...' : 'Sign In'}
+              {loading ? (isRegister ? 'Creating Account...' : 'Signing in...') : (isRegister ? 'Create Account' : 'Sign In')}
             </Button>
           </form>
+          
+          <Box sx={{ textAlign: 'center', mt: 3 }}>
+            <Typography variant="body2" color="text.secondary">
+              {isRegister ? 'Already have an account?' : "Don't have an account?"}
+            </Typography>
+            <Button
+              variant="text"
+              onClick={() => {
+                setIsRegister(!isRegister);
+                setError("");
+                setCred({ email: "", password: "" });
+                setRegData({ 
+                  studentname: "", 
+                  email: "", 
+                  password: "", 
+                  phoneNumber: "",
+                  gender: "",
+                  address: "",
+                  dateOfBirth: "",
+                  dateOfJoining: new Date().toISOString().split('T')[0],
+                  highestQualification: "",
+                  selectCourse: "",
+                  studentId: ""
+                });
+              }}
+              sx={{ mt: 1, fontWeight: 600 }}
+            >
+              {isRegister ? 'Sign In' : 'Register Here'}
+            </Button>
+          </Box>
         </Paper>
         </motion.div>
       </Container>

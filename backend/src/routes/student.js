@@ -41,7 +41,7 @@ const authMiddleware = require("../middleware/authMiddleware");
  *       401:
  *         description: Unauthorized
  */
-router.post('/register', authMiddleware.verifyToken, controllers.registerStudent);
+router.post('/register', controllers.registerStudent);
 
 /**
  * @swagger
