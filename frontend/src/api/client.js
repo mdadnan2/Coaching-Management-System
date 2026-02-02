@@ -3,7 +3,7 @@ import config from '../config/env';
 
 const apiClient = axios.create({
   baseURL: config.apiBaseUrl,
-  timeout: config.apiTimeout,
+  timeout: 90000,// Increase to 60 seconds for slow backend
   headers: {
     'Content-Type': 'application/json'
   }
@@ -30,7 +30,7 @@ apiClient.interceptors.response.use(
     // Handle 401 - Token expired
     if (error.response?.status === 401 && !originalRequest._retry) {
       originalRequest._retry = true;
-      
+
       try {
         const refreshToken = localStorage.getItem(`${config.storage.prefix}${config.storage.refreshTokenKey}`);
         if (refreshToken) {
