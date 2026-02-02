@@ -7,22 +7,10 @@ import instance from "../apis/apiRequest";
 import { student_Login, RegisterStudent } from "../apis/apiContsants";
 import toast from 'react-hot-toast';
 import { motion } from 'framer-motion';
+import MultiStepAdmission from '../Pages/Addmission/MultiStepAdmission';
 
 const Login = () => {
   const [cred, setCred] = useState({ email: "", password: "" });
-  const [regData, setRegData] = useState({ 
-    studentname: "", 
-    email: "", 
-    password: "", 
-    phoneNumber: "",
-    gender: "",
-    address: "",
-    dateOfBirth: "",
-    dateOfJoining: new Date().toISOString().split('T')[0],
-    highestQualification: "",
-    selectCourse: "",
-    studentId: ""
-  });
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
@@ -30,11 +18,7 @@ const Login = () => {
   const dispatch = useDispatch();
 
   const handleChange = (e) => {
-    if (isRegister) {
-      setRegData({ ...regData, [e.target.name]: e.target.value });
-    } else {
-      setCred({ ...cred, [e.target.name]: e.target.value });
-    }
+    setCred({ ...cred, [e.target.name]: e.target.value });
     setError("");
   };
 
@@ -42,25 +26,63 @@ const Login = () => {
     e.preventDefault();
     setLoading(true);
     try {
-      if (isRegister) {
-        console.log('Registration payload:', regData);
-        const response = await instance.post(RegisterStudent, regData);
-        localStorage.setItem("coaching_app_auth_token", response.data.data.token);
-        toast.success('Registration successful! Welcome!');
-        setTimeout(() => dispatch(entry()), 500);
-      } else {
-        const response = await instance.post(student_Login, cred);
-        localStorage.setItem("coaching_app_auth_token", response.data.data.token);
-        toast.success('Welcome back!');
-        setTimeout(() => dispatch(entry()), 500);
-      }
+      const response = await instance.post(student_Login, cred);
+      localStorage.setItem("coaching_app_auth_token", response.data.data.token);
+      toast.success('Welcome back!');
+      setTimeout(() => dispatch(entry()), 500);
     } catch (err) {
-      setError(isRegister ? "Registration failed. Please try again." : "Invalid email or password");
-      toast.error(isRegister ? 'Registration failed.' : 'Login failed. Please check your credentials.');
+      setError("Invalid email or password");
+      toast.error('Login failed. Please check your credentials.');
     } finally {
       setLoading(false);
     }
   };
+
+  const handleRegistration = async (formData) => {
+    setLoading(true);
+    try {
+      console.log('Registration payload:', formData);
+      const response = await instance.post(RegisterStudent, formData);
+      localStorage.setItem("coaching_app_auth_token", response.data.data.token);
+      toast.success('Registration successful! Welcome!');
+      setTimeout(() => dispatch(entry()), 500);
+    } catch (err) {
+      setError("Registration failed. Please try again.");
+      toast.error('Registration failed.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  if (isRegister) {
+    return (
+      <Box sx={{ 
+        minHeight: '100vh', 
+        display: 'flex', 
+        alignItems: 'center', 
+        justifyContent: 'center',
+        background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+        py: 4
+      }}>
+        <Container maxWidth="sm">
+          <motion.div
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.3 }}
+          >
+            <MultiStepAdmission 
+              onSubmit={handleRegistration} 
+              showSignInLink={true}
+              onSignInClick={() => {
+                setIsRegister(false);
+                setError("");
+              }}
+            />
+          </motion.div>
+        </Container>
+      </Box>
+    );
+  }
 
   return (
     <Box sx={{ 
@@ -68,7 +90,8 @@ const Login = () => {
       display: 'flex', 
       alignItems: 'center', 
       justifyContent: 'center',
-      background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)'
+      background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+      py: 4
     }}>
       <Container maxWidth="sm">
         <motion.div
@@ -80,121 +103,30 @@ const Login = () => {
           <Box sx={{ textAlign: 'center', mb: 4 }}>
             <School sx={{ fontSize: 56, color: 'primary.main', mb: 2 }} />
             <Typography variant="h4" fontWeight={700} gutterBottom>
-              {isRegister ? 'Create Account' : 'Welcome Back'}
+              Welcome Back
             </Typography>
             <Typography variant="body2" color="text.secondary">
-              {isRegister ? 'Join our coaching platform' : 'Sign in to your coaching account'}
+              Sign in to your coaching account
             </Typography>
           </Box>
 
           <form onSubmit={handleSubmit}>
-            {isRegister && (
-              <>
-                <TextField
-                  fullWidth
-                  label="Full Name"
-                  name="studentname"
-                  value={regData.studentname}
-                  onChange={handleChange}
-                  required
-                  sx={{ mb: 2 }}
-                />
-                <TextField
-                  fullWidth
-                  label="Student ID"
-                  name="studentId"
-                  value={regData.studentId}
-                  onChange={handleChange}
-                  required
-                  sx={{ mb: 2 }}
-                />
-              </>
-            )}
             <TextField
               fullWidth
               label="Email"
               name="email"
               type="email"
-              value={isRegister ? regData.email : cred.email}
+              value={cred.email}
               onChange={handleChange}
               required
               sx={{ mb: 2 }}
             />
-            {isRegister && (
-              <>
-                <TextField
-                  fullWidth
-                  label="Phone Number"
-                  name="phoneNumber"
-                  value={regData.phoneNumber}
-                  onChange={handleChange}
-                  required
-                  sx={{ mb: 2 }}
-                />
-                <TextField
-                  fullWidth
-                  select
-                  label="Gender"
-                  name="gender"
-                  value={regData.gender}
-                  onChange={handleChange}
-                  required
-                  sx={{ mb: 2 }}
-                  SelectProps={{ native: true }}
-                >
-                  <option value=""></option>
-                  <option value="Male">Male</option>
-                  <option value="Female">Female</option>
-                  <option value="Other">Other</option>
-                </TextField>
-                <TextField
-                  fullWidth
-                  label="Address"
-                  name="address"
-                  value={regData.address}
-                  onChange={handleChange}
-                  required
-                  multiline
-                  rows={2}
-                  sx={{ mb: 2 }}
-                />
-                <TextField
-                  fullWidth
-                  label="Date of Birth"
-                  name="dateOfBirth"
-                  type="date"
-                  value={regData.dateOfBirth}
-                  onChange={handleChange}
-                  required
-                  InputLabelProps={{ shrink: true }}
-                  sx={{ mb: 2 }}
-                />
-                <TextField
-                  fullWidth
-                  label="Highest Qualification"
-                  name="highestQualification"
-                  value={regData.highestQualification}
-                  onChange={handleChange}
-                  required
-                  sx={{ mb: 2 }}
-                />
-                <TextField
-                  fullWidth
-                  label="Select Course"
-                  name="selectCourse"
-                  value={regData.selectCourse}
-                  onChange={handleChange}
-                  required
-                  sx={{ mb: 2 }}
-                />
-              </>
-            )}
             <TextField
               fullWidth
               label="Password"
               name="password"
               type={showPassword ? "text" : "password"}
-              value={isRegister ? regData.password : cred.password}
+              value={cred.password}
               onChange={handleChange}
               required
               sx={{ mb: 3 }}
@@ -221,37 +153,23 @@ const Login = () => {
               disabled={loading}
               sx={{ py: 1.5, fontWeight: 600 }}
             >
-              {loading ? (isRegister ? 'Creating Account...' : 'Signing in...') : (isRegister ? 'Create Account' : 'Sign In')}
+              {loading ? 'Signing in...' : 'Sign In'}
             </Button>
           </form>
           
           <Box sx={{ textAlign: 'center', mt: 3 }}>
             <Typography variant="body2" color="text.secondary">
-              {isRegister ? 'Already have an account?' : "Don't have an account?"}
+              Don't have an account?
             </Typography>
             <Button
               variant="text"
               onClick={() => {
-                setIsRegister(!isRegister);
+                setIsRegister(true);
                 setError("");
-                setCred({ email: "", password: "" });
-                setRegData({ 
-                  studentname: "", 
-                  email: "", 
-                  password: "", 
-                  phoneNumber: "",
-                  gender: "",
-                  address: "",
-                  dateOfBirth: "",
-                  dateOfJoining: new Date().toISOString().split('T')[0],
-                  highestQualification: "",
-                  selectCourse: "",
-                  studentId: ""
-                });
               }}
               sx={{ mt: 1, fontWeight: 600 }}
             >
-              {isRegister ? 'Sign In' : 'Register Here'}
+              Register Here
             </Button>
           </Box>
         </Paper>

@@ -6,7 +6,7 @@ import instance from "../../apis/apiRequest";
 
 const steps = ["Personal Info", "Academic Details", "Course Selection"];
 
-const MultiStepAdmission = ({ onSubmit, sendStudentData }) => {
+const MultiStepAdmission = ({ onSubmit, sendStudentData, showSignInLink, onSignInClick }) => {
   const [activeStep, setActiveStep] = useState(0);
   const [courses, setCourses] = useState([]);
   const [formData, setFormData] = useState({
@@ -183,6 +183,26 @@ const MultiStepAdmission = ({ onSubmit, sendStudentData }) => {
           {activeStep === steps.length - 1 ? (sendStudentData ? 'Update' : 'Submit') : 'Next'}
         </Button>
       </Box>
+
+      {showSignInLink && (
+        <Box sx={{ 
+          textAlign: 'center', 
+          mt: 3, 
+          pt: 2,
+          borderTop: '1px solid rgba(255,255,255,0.12)'
+        }}>
+          <Typography variant="body2" color="text.secondary" sx={{ mb: 1 }}>
+            Already have an account?
+          </Typography>
+          <Button
+            variant="text"
+            onClick={onSignInClick}
+            sx={{ fontWeight: 600, color: 'primary.main' }}
+          >
+            Sign In
+          </Button>
+        </Box>
+      )}
     </Card>
   );
 };
