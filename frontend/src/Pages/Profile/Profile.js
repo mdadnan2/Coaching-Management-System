@@ -136,7 +136,7 @@ const Profile = () => {
                 src={profile.photo}
                 sx={{ width: { xs: 70, sm: 80 }, height: { xs: 70, sm: 80 }, bgcolor: "primary.main", fontSize: { xs: 32, sm: 36 } }}
               >
-                {!profile.photo && profile.name.charAt(0)}
+                {!profile.photo && profile.name?.charAt(0)?.toUpperCase()}
               </Avatar>
               <Box sx={{ flex: 1 }}>
                 <Typography variant="h5" fontWeight={600} sx={{ fontSize: { xs: '1.25rem', sm: '1.5rem' } }}>

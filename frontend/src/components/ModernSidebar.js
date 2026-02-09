@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Box, Drawer, List, ListItem, ListItemButton, ListItemIcon, ListItemText, AppBar, Toolbar, Typography, IconButton, Avatar, Menu, MenuItem, Divider, Button } from "@mui/material";
 import { Dashboard, AccountCircle, LibraryBooks, Logout, Menu as MenuIcon, DarkMode, LightMode, Settings, Person, ChevronLeft, ChevronRight } from "@mui/icons-material";
 import { NavLink, useLocation } from "react-router-dom";
@@ -6,6 +6,7 @@ import { useDispatch } from "react-redux";
 import { logout } from "../reducers/LoginSlice";
 import { useDarkMode } from "../theme/DarkModeProvider";
 import { motion } from "framer-motion";
+import instance from "../apis/apiRequest";
 
 const drawerWidth = 240;
 const collapsedWidth = 70;
@@ -21,11 +22,18 @@ export default function ModernSidebar({ children }) {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [collapsed, setCollapsed] = useState(false);
   const [anchorEl, setAnchorEl] = useState(null);
+  const [userName, setUserName] = useState("");
   const location = useLocation();
   const dispatch = useDispatch();
   const { darkMode, toggleDarkMode } = useDarkMode();
 
   const currentTab = menuItems.find(item => item.path === location.pathname);
+
+  useEffect(() => {
+    instance.get('/student/profile')
+      .then(res => setUserName(res.data.data.studentname || ""))
+      .catch(() => {});
+  }, []);
 
   const handleDrawerToggle = () => setMobileOpen(!mobileOpen);
   const handleMenuOpen = (e) => setAnchorEl(e.currentTarget);
@@ -132,7 +140,9 @@ export default function ModernSidebar({ children }) {
             {darkMode ? <LightMode /> : <DarkMode />}
           </IconButton>
           <IconButton onClick={handleMenuOpen}>
-            <Avatar sx={{ width: 36, height: 36, bgcolor: 'primary.main' }}>A</Avatar>
+            <Avatar sx={{ width: 36, height: 36, bgcolor: 'primary.main' }}>
+              {userName?.charAt(0)?.toUpperCase() || 'A'}
+            </Avatar>
           </IconButton>
           <Menu anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={handleMenuClose}>
             <MenuItem component={NavLink} to="/profile" onClick={handleMenuClose}>
