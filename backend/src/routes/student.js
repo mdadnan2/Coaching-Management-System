@@ -297,6 +297,32 @@ router.post('/change-password', authMiddleware.verifyToken, controllers.changePa
 
 /**
  * @swagger
+ * /student/refresh-token:
+ *   post:
+ *     summary: Refresh authentication token
+ *     tags: [Students]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Token refreshed successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                 data:
+ *                   type: object
+ *                   properties:
+ *                     token:
+ *                       type: string
+ */
+router.post('/refresh-token', authMiddleware.verifyToken, controllers.refreshToken);
+
+/**
+ * @swagger
  * /student/{id}:
  *   get:
  *     summary: Get single student by ID

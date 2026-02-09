@@ -9,7 +9,7 @@ function verifyToken(req, res, next) {
   if (typeof bearerHeader !== "undefined") {
     const bearer = bearerHeader.split(" ");
     const token = bearer[1];
-    jwt.verify(token, "secret_key", (err, user) => {
+    jwt.verify(token, process.env.JWT_SECRET || "secret_key", (err, user) => {
       if (err) {
         res.status(401).send(resObject(401, "Invalid token"));
       } else {

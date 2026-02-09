@@ -116,7 +116,7 @@ exports.registerStudent = async (req, res, next) => {
             highestQualification: savedStudent.highestQualification,
             role: savedStudent.role
         };
-        const token = jwt.sign(tokenPayload, "secret_key", { expiresIn: '24h' });
+        const token = jwt.sign(tokenPayload, process.env.JWT_SECRET || "secret_key", { expiresIn: process.env.JWT_EXPIRES_IN || '7d' });
 
         // Send welcome email (non-blocking)
         if (savedStudent.notificationSettings?.email) {
@@ -238,8 +238,8 @@ exports.loginStudent = (req, res, next) => {
                 role: studentData.role,
                 creatoremail: studentData.createdBy // Include the creator field here
             }
-            const token = jwt.sign(params, "secret_key", {
-                expiresIn: '24h'
+            const token = jwt.sign(params, process.env.JWT_SECRET || "secret_key", {
+                expiresIn: process.env.JWT_EXPIRES_IN || '7d'
             });
 
             const { __v, password, createdBy, createdDate, ...sanitizedStudentData } = studentData.toObject();
@@ -320,6 +320,40 @@ exports.getCurrentProfile = async (req, res) => {
         }
 
         res.status(STATUS.Success).send(resObject(STATUS.Success, 'Profile retrieved', student));
+    } catch (error) {
+        console.error(error);
+        res.status(STATUS.internalServerError).send(resObject(STATUS.internalServerError, general.internalServerError, error));
+    }
+};
+
+// Refresh token endpoint
+exports.refreshToken = async (req, res) => {
+    try {
+        const studentEmail = req.payload?.email;
+        const student = await studentSchema.findOne({ email: studentEmail });
+        
+        if (!student) {
+            return res.status(STATUS.unauthorized).send(resObject(STATUS.unauthorized, 'Invalid token'));
+        }
+
+        const params = {
+            gender: student.gender,
+            studentId: student.studentId,
+            phoneNumber: student.phoneNumber,
+            address: student.address,
+            dateOfBirth: student.dateOfBirth,
+            dateOfJoining: student.dateOfJoining,
+            email: student.email,
+            selectCourse: student.selectCourse,
+            highestQualification: student.highestQualification,
+            role: student.role
+        };
+
+        const newToken = jwt.sign(params, process.env.JWT_SECRET || "secret_key", {
+            expiresIn: process.env.JWT_EXPIRES_IN || '7d'
+        });
+
+        res.status(STATUS.Success).send(resObject(STATUS.Success, 'Token refreshed', { token: newToken }));
     } catch (error) {
         console.error(error);
         res.status(STATUS.internalServerError).send(resObject(STATUS.internalServerError, general.internalServerError, error));
