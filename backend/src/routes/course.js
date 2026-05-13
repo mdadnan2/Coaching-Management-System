@@ -110,7 +110,7 @@ router.post('/addcourse', authMiddleware.verifyToken, controllers.addCourse);
  *       401:
  *         description: Unauthorized
  */
-router.get('/', authMiddleware.verifyToken, controllers.getAllCourses);
+router.get('/', controllers.getAllCourses);
 
 /**
  * @swagger
