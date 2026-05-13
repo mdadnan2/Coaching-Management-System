@@ -3,7 +3,6 @@ import { Box, Button, Card, Stepper, Step, StepLabel, TextField, MenuItem, Selec
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import { motion, AnimatePresence } from "framer-motion";
 import axios from "axios";
-import instance from "../../apis/apiRequest";
 import config from "../../config/env";
 
 const steps = ["Personal Info", "Academic Details", "Course Selection"];
