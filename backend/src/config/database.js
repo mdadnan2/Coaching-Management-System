@@ -3,10 +3,7 @@ const config = require('./env');
 
 const connectDB = async () => {
   try {
-    await mongoose.connect(config.db.connectionString, {
-      useNewUrlParser: true,
-      useUnifiedTopology: true
-    });
+    await mongoose.connect(config.db.connectionString);
     console.log(`✅ Database connected: ${config.db.name}`);
   } catch (error) {
     console.error('❌ Database connection error:', error.message);
