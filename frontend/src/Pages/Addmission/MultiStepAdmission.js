@@ -2,7 +2,9 @@ import React, { useState, useEffect } from "react";
 import { Box, Button, Card, Stepper, Step, StepLabel, TextField, MenuItem, Select, InputLabel, FormControl, Typography, InputAdornment, IconButton } from "@mui/material";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import { motion, AnimatePresence } from "framer-motion";
+import axios from "axios";
 import instance from "../../apis/apiRequest";
+import config from "../../config/env";
 
 const steps = ["Personal Info", "Academic Details", "Course Selection"];
 
@@ -36,7 +38,7 @@ const MultiStepAdmission = ({ onSubmit, sendStudentData, showSignInLink, onSignI
 
   const fetchCourses = async () => {
     try {
-      const res = await instance.get('/course/');
+      const res = await axios.get(`${config.apiBaseUrl}/course/`);
       setCourses(res.data.data);
     } catch (error) {
       console.error('Failed to fetch courses');

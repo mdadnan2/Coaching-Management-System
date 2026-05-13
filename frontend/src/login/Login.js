@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { entry } from "../reducers/LoginSlice";
 import { Box, Container, TextField, Button, Typography, Paper, InputAdornment, IconButton, Checkbox, FormControlLabel } from "@mui/material";
-import { Visibility, VisibilityOff, School } from "@mui/icons-material";
+import { Visibility, VisibilityOff, School, ContentCopy, Check } from "@mui/icons-material";
 import instance from "../apis/apiRequest";
 import { student_Login, RegisterStudent } from "../apis/apiContsants";
 import toast from 'react-hot-toast';
@@ -17,7 +17,17 @@ const Login = () => {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const [isRegister, setIsRegister] = useState(false);
+  const [copied, setCopied] = useState({ email: false, password: false });
   const dispatch = useDispatch();
+
+  const DEMO = { email: 'demo@test.com', password: 'demo123' };
+
+  const handleCopy = (field) => {
+    navigator.clipboard.writeText(DEMO[field]);
+    setCred(prev => ({ ...prev, [field]: DEMO[field] }));
+    setCopied(prev => ({ ...prev, [field]: true }));
+    setTimeout(() => setCopied(prev => ({ ...prev, [field]: false })), 2000);
+  };
 
   // Auto-fill credentials if remembered
   useEffect(() => {
@@ -117,97 +127,116 @@ const Login = () => {
       background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
       overflow: 'hidden'
     }}>
-      <Container maxWidth="xs" sx={{ my: 0 }}>
+      <Container maxWidth="xs">
         <motion.div
           initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.3 }}
         >
-          <Paper elevation={4} sx={{ p: 3, borderRadius: 2, maxWidth: 380, mx: 'auto' }}>
-          <Box sx={{ textAlign: 'center', mb: 2.5 }}>
-            <School sx={{ fontSize: 42, color: 'primary.main', mb: 1 }} />
-            <Typography variant="h5" fontWeight={600} gutterBottom sx={{ mb: 0.5 }}>
-              Welcome Back
-            </Typography>
-            <Typography variant="body2" color="text.secondary">
-              Sign in to your account
-            </Typography>
-          </Box>
-
-          <form onSubmit={handleSubmit}>
-            <TextField
-              fullWidth
-              label="Email"
-              name="email"
-              type="email"
-              value={cred.email}
-              onChange={handleChange}
-              required
-              sx={{ mb: 1.5 }}
-            />
-            <TextField
-              fullWidth
-              label="Password"
-              name="password"
-              type={showPassword ? "text" : "password"}
-              value={cred.password}
-              onChange={handleChange}
-              required
-              sx={{ mb: 1.5 }}
-              InputProps={{
-                endAdornment: (
-                  <InputAdornment position="end">
-                    <IconButton onClick={() => setShowPassword(!showPassword)} edge="end">
-                      {showPassword ? <VisibilityOff /> : <Visibility />}
-                    </IconButton>
-                  </InputAdornment>
-                )
-              }}
-            />
-            {error && (
-              <Typography color="error" variant="body2" sx={{ mb: 2 }}>
-                {error}
+          <Paper elevation={4} sx={{ p: 2, borderRadius: 2, mx: 'auto', maxWidth: 340 }}>
+            <Box sx={{ textAlign: 'center', mb: 1 }}>
+              <School sx={{ fontSize: 28, color: 'primary.main', mb: 0.25 }} />
+              <Typography variant="h6" fontWeight={600} sx={{ lineHeight: 1.3 }}>
+                Welcome Back
               </Typography>
-            )}
-            <FormControlLabel
-              control={
-                <Checkbox
-                  checked={rememberMe}
-                  onChange={(e) => setRememberMe(e.target.checked)}
-                  color="primary"
-                />
-              }
-              label="Remember me"
-              sx={{ mb: 1.5, mt: -0.5 }}
-            />
-            <Button
-              fullWidth
-              type="submit"
-              variant="contained"
-              size="large"
-              disabled={loading}
-              sx={{ py: 1.1, fontWeight: 600, mb: 1.5 }}
-            >
-              {loading ? 'Signing in...' : 'Sign In'}
-            </Button>
-          </form>
-          
-          <Box sx={{ textAlign: 'center' }}>
-            <Typography variant="body2" color="text.secondary" display="inline">
-              Don't have an account?{' '}
-            </Typography>
-            <Button
-              variant="text"
-              onClick={() => {
-                setIsRegister(true);
-                setError("");
-              }}
-              sx={{ fontWeight: 600, p: 0, minWidth: 'auto' }}
-            >
-              Register
-            </Button>
-          </Box>
-        </Paper>
+              <Typography variant="caption" color="text.secondary">
+                Sign in to your account
+              </Typography>
+            </Box>
+
+            <form onSubmit={handleSubmit}>
+              <TextField
+                fullWidth
+                label="Email"
+                name="email"
+                type="email"
+                value={cred.email}
+                onChange={handleChange}
+                required
+                size="small"
+                sx={{ mb: 1 }}
+              />
+              <TextField
+                fullWidth
+                label="Password"
+                name="password"
+                type={showPassword ? "text" : "password"}
+                value={cred.password}
+                onChange={handleChange}
+                required
+                size="small"
+                error={!!error}
+                helperText={error || ' '}
+                sx={{ mb: 0, '& .MuiFormHelperText-root': { mt: 0.25, mb: 0 } }}
+                InputProps={{
+                  endAdornment: (
+                    <InputAdornment position="end">
+                      <IconButton onClick={() => setShowPassword(!showPassword)} edge="end" size="small">
+                        {showPassword ? <VisibilityOff /> : <Visibility />}
+                      </IconButton>
+                    </InputAdornment>
+                  )
+                }}
+              />
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    checked={rememberMe}
+                    onChange={(e) => setRememberMe(e.target.checked)}
+                    color="primary"
+                    size="small"
+                  />
+                }
+                label={<Typography variant="body2">Remember me</Typography>}
+                sx={{ mb: 0.75, mt: 0 }}
+              />
+              <Button
+                fullWidth
+                type="submit"
+                variant="contained"
+                disabled={loading}
+                sx={{ py: 0.9, fontWeight: 600, mb: 1 }}
+              >
+                {loading ? 'Signing in...' : 'Sign In'}
+              </Button>
+            </form>
+
+            <Box sx={{
+              p: 1,
+              borderRadius: 1.5,
+              border: '1px dashed',
+              borderColor: 'primary.light',
+              background: 'rgba(102,126,234,0.07)',
+              mb: 1
+            }}>
+              <Typography variant="caption" fontWeight={600} color="primary.main" display="block" sx={{ mb: 0.5 }}>
+                🚀 Demo Credentials
+              </Typography>
+              {[{ field: 'email', label: 'Email', value: DEMO.email }, { field: 'password', label: 'Password', value: DEMO.password }].map(({ field, label, value }) => (
+                <Box key={field} sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', mb: field === 'email' ? 0.25 : 0 }}>
+                  <Typography variant="caption" color="text.secondary" sx={{ fontFamily: 'monospace', fontSize: '0.75rem' }}>
+                    <span style={{ color: '#888' }}>{label}: </span>{value}
+                  </Typography>
+                  <IconButton size="small" onClick={() => handleCopy(field)} sx={{ ml: 1, color: copied[field] ? 'success.main' : 'primary.main' }}>
+                    {copied[field] ? <Check sx={{ fontSize: 13 }} /> : <ContentCopy sx={{ fontSize: 13 }} />}
+                  </IconButton>
+                </Box>
+              ))}
+            </Box>
+
+            <Box sx={{ textAlign: 'center' }}>
+              <Typography variant="body2" color="text.secondary" display="inline">
+                Don't have an account?{' '}
+              </Typography>
+              <Button
+                variant="text"
+                onClick={() => { setIsRegister(true); setError(""); }}
+                sx={{ fontWeight: 600, p: 0, minWidth: 'auto', textTransform: 'none' }}
+              >
+                Register
+              </Button>
+            </Box>
+          </Paper>
         </motion.div>
       </Container>
     </Box>
