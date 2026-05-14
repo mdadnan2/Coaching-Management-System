@@ -1,9 +1,8 @@
 const cors = require('cors');
-const config = require('./env');
 
 const corsOptions = {
   origin: (origin, callback) => {
-    const allowedOrigins = config.cors.origin.split(',').map(o => o.trim());
+    const allowedOrigins = (process.env.CORS_ORIGIN || '').split(',').map(o => o.trim());
     
     // Allow requests with no origin (mobile apps, Postman, Swagger UI, etc.)
     if (!origin) return callback(null, true);
@@ -20,7 +19,7 @@ const corsOptions = {
       callback(new Error(`Not allowed by CORS: ${origin}`));
     }
   },
-  credentials: config.cors.credentials,
+  credentials: process.env.CORS_CREDENTIALS === 'true',
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With', 'Accept', 'Origin'],
   exposedHeaders: ['Content-Range', 'X-Content-Range'],

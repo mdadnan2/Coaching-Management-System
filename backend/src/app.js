@@ -1,7 +1,7 @@
+require('dotenv').config({ path: `.env.${process.env.NODE_ENV || 'development'}` });
 const express = require("express");
 const morgan = require('morgan');
 const bodyParser = require("body-parser");
-const config = require("./config/env");
 const connectDB = require("./config/database");
 const corsMiddleware = require("./config/cors");
 const { setupRouters } = require("./routes/index");
@@ -13,7 +13,7 @@ const app = express();
 connectDB();
 
 // Logging middleware
-app.use(morgan(config.logging.morganFormat));
+app.use(morgan(process.env.MORGAN_FORMAT || 'dev'));
 
 // CORS middleware
 app.use(corsMiddleware);
@@ -77,7 +77,7 @@ app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(specs, {
 app.get('/health', (req, res) => {
   res.status(200).json({ 
     status: 'OK', 
-    environment: config.env,
+    environment: process.env.NODE_ENV || 'development',
     timestamp: new Date().toISOString(),
     documentation: '/api-docs'
   });
@@ -98,16 +98,16 @@ app.use((req, res) => {
 app.use((err, req, res, next) => {
   console.error('Error:', err);
   res.status(err.status || 500).json({
-    error: config.env === 'development' ? err.message : 'Internal server error',
-    ...(config.env === 'development' && { stack: err.stack })
+    error: process.env.NODE_ENV === 'development' ? err.message : 'Internal server error',
+    ...(process.env.NODE_ENV === 'development' && { stack: err.stack })
   });
 });
 
 // Start server
-app.listen(config.port, () => {
-  console.log(`🚀 Server running on port ${config.port} in ${config.env} mode`);
-  console.log(`📍 API: http://localhost:${config.port}`);
-  console.log(`📚 Swagger Docs: http://localhost:${config.port}/api-docs`);
+app.listen(process.env.PORT || 5010, () => {
+  console.log(`🚀 Server running on port ${process.env.PORT || 5010} in ${process.env.NODE_ENV || 'development'} mode`);
+  console.log(`📍 API: http://localhost:${process.env.PORT || 5010}`);
+  console.log(`📚 Swagger Docs: http://localhost:${process.env.PORT || 5010}/api-docs`);
 });
 
 module.exports = app;

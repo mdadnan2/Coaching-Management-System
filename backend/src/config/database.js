@@ -1,10 +1,10 @@
+require('dotenv').config({ path: `.env.${process.env.NODE_ENV || 'development'}` });
 const mongoose = require('mongoose');
-const config = require('./env');
 
 const connectDB = async () => {
   try {
-    await mongoose.connect(config.db.connectionString);
-    console.log(`✅ Database connected: ${config.db.name}`);
+    await mongoose.connect(process.env.DB_CONNECTION_STRING);
+    console.log(`✅ Database connected: ${process.env.DB_NAME}`);
   } catch (error) {
     console.error('❌ Database connection error:', error.message);
     process.exit(1);
